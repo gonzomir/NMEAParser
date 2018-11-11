@@ -1,6 +1,6 @@
 /*
   NMEA Parser library v1.0
-  By deadbird
+  By X99
 
   This library is provided as-is.
   Its aim is to parse NMEA sentences from a LS20126 or any other NMEA compatible GPS.
@@ -24,35 +24,8 @@
 
   It's that simple.
 
-  The library is shipped with a test program based on Qt4 you can compile almost anywhere.
-  Once compiled, type your NMEA string in the field, the program will parse it for you.
-  To extend this program: check dialog.cpp, you'll find anything you need in it. You'll
-  have to customize dialog.ui too.
-
   This header includes basic sentence description, at least those supported by LS20126.
-
-  If you have any comment about this lib, feel free to send me a mail (deadbird 99 at gmail dot com)
-  or to leave a comment on my website (http://deadbird.fr). If you have improvements, I'd be glad
-  to hear about it too ;)
-
-  Cette librarie est fournie en l'état.
-  Son but est de décortiquer les phrases NMEA émises par un LS20126 ou tout autre module GPS
-  compatible avec le standard NMEA. Pourquoi développer une librarie alors qu'il en existe déjà
-  telles que TinyGPS? Voici la raison principale: l'extensibilité. Avez-vous déjà essayé d'ajouter
-  de nouvelles phrases NMEA à TinyGPS? J'ai testé, c'est plutôt difficile.
-  Je suis donc parti de ce constat, et j'ai développé ma propre librarie, facile à étendre. Elle repose
-  en grande partie sur un sscanf customisé pour coller à mes besoins. Techniquement parlant, sscanf
-  a deux inconvénients:
-  - il est beaucoup trop sophistiqué pour ce que l'on veut en faire ici. De plus, certaines données telles
-    que les latitudes ou les temps UTC sont reconnus comme des flottants
-  - sscanf ne supporte pas les champs vides
-
 */
-
-
-
-
-
 
 
 
