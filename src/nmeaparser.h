@@ -28,7 +28,7 @@
 */
 #pragma once
 
-//#include <Arduino.h>
+#include <Arduino.h>
 #include <stdarg.h>
 
 /*
@@ -344,10 +344,11 @@ public:
     char generate_checksum(const char *str);
 
     //central dispatcher
+    bool dispatch(const String str);
     bool dispatch(const char *str);
 
     //types
-    enum STRINGS_TYPES {TYPE_PLSR2451=1, TYPE_PLSR2452, TYPE_PLSR2457, TYPE_GPGGA, TYPE_GPGSA, TYPE_GPGSV, TYPE_HCHDG, TYPE_GPRMC};
+    enum STRINGS_TYPES {UNKNOWN=0, TYPE_PLSR2451, TYPE_PLSR2452, TYPE_PLSR2457, TYPE_GPGGA, TYPE_GPGSA, TYPE_GPGSV, TYPE_HCHDG, TYPE_GPRMC};
     STRINGS_TYPES getLastProcessedType() {return last_processed;}
 
 
@@ -361,26 +362,26 @@ public:
     bool parse_hchdg(const char *str);
     bool parse_gprmc(const char *str);
 
-    PLSR2451 last_plsr2451;
-    PLSR2452 last_plsr2452;
-    PLSR2457 last_plsr2457;
-    GPGGA    last_gpgga;
-    GPGSA    last_gpgsa;
-    GPGSV    last_gpgsv;
-    HCHDG    last_hchdg;
-    GPRMC    last_gprmc;
+    PLSR2451 last_plsr2451 = {};
+    PLSR2452 last_plsr2452 = {};
+    PLSR2457 last_plsr2457 = {};
+    GPGGA    last_gpgga = {};
+    GPGSA    last_gpgsa = {};
+    GPGSV    last_gpgsv = {};
+    HCHDG    last_hchdg = {};
+    GPRMC    last_gprmc = {};
 
 private:
-    STRINGS_TYPES last_processed;
+    STRINGS_TYPES last_processed = UNKNOWN;
 
-    int16_t checksum;
-    int16_t scanned;
+    int16_t checksum = 0;
+    int16_t scanned = 0;
 
     //string parsing subfunctions
     int16_t my_atoh(char a);
     char *my_strncpy(char *dst, const char *src, int16_t n);
     int16_t my_strlen(const char* str);
-    in32t_t my_atoi(const char *str);
+    int32_t my_atoi(const char *str);
     float my_atof(const char *s);
 
     //main parser

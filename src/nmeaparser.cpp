@@ -1,7 +1,11 @@
-#include "nmeaparser.h"
+#include <nmeaparser.h>
 
 NMEAParser::NMEAParser() {
     last_plsr2451.isValid = false;
+}
+
+bool NMEAParser::dispatch(const String str) {
+    return dispatch(str.c_str());
 }
 
 bool NMEAParser::dispatch(const char *str) {
@@ -304,8 +308,6 @@ int16_t NMEAParser::my_sscanf(int16_t *field_validity, const char *src, const ch
     va_list ap;
 
     //pointers to types that can be converted
-    float *f;
-    int16_t *i;
     int16_t conv = 0, index;
     char *a, *fp, *sp = (char*)src, buf[128] = {'\0'};
 
@@ -340,7 +342,7 @@ int16_t NMEAParser::my_sscanf(int16_t *field_validity, const char *src, const ch
             //compute an int
             case 'i':
             case 'd':
-                i = va_arg(ap, int16_t *);
+                int16_t *i = va_arg(ap, int16_t *);
                 if (!*buf) *i = 0;
                 else {
                     *i = my_atoi(buf);
@@ -349,7 +351,7 @@ int16_t NMEAParser::my_sscanf(int16_t *field_validity, const char *src, const ch
                 break;
             //compute a float
             case 'f':
-                f = va_arg(ap, float *);
+                float *f = va_arg(ap, float *);
                 if (!*buf) *f = 0;
                 else {
                     *f = (float)my_atof(buf);
