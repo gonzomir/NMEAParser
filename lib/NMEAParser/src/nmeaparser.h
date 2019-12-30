@@ -26,6 +26,7 @@
 
   This header includes basic sentence description, at least those supported by LS20126.
 */
+
 #pragma once
 
 #include <Arduino.h>

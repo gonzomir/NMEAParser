@@ -257,11 +257,16 @@ int16_t NMEAParser::my_strlen(const char* str) {
     return s;
 }
 
-in32t_t NMEAParser::my_atoi(const char *str) {
-    in32t_t ret = 0;
+int32_t NMEAParser::my_atoi(const char *str) {
+    int32_t ret = 0;
+    int32_t sign = 1;
+    if (*str == '-') {
+        sign = -1;
+        str++;
+    }
     while (IS_DIGIT(*str))
         ret = 10 * ret + *str++ - '0';
-    return ret;
+    return sign*ret;
 }
 
 float NMEAParser::my_atof(const char *s) {
