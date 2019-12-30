@@ -1,32 +1,3 @@
-/*
-  NMEA Parser library v1.0
-  By X99
-
-  This library is provided as-is.
-  Its aim is to parse NMEA sentences from a LS20126 or any other NMEA compatible GPS.
-  Why do I develop my own lib while
-  there are plenty like this one, like TinyGPS? Here's the main reason: extensibility.
-  Have you tried to add a new sentence to TinyGPS? I did. A real plain in the ass.
-  I decided to develop my own lib, making it easy to extend. It relies heavily on
-  a custom implementation of sscanf to fit my needs. Technically speaking, sscanf
-  parses very wells NMEA strings, but has two main drawbacks:
-  - it's ways to sophisticated for what we need here. And some datas such as latitude or
-    UTC time are recognized as floats.
-  - sscanf doesn't support empty fields. In NMEA strings, blank fields are common, especially
-    when GPS works indoor. Default sscanf sees empty fields as errors. Mine parses them fine.
-
-  Talking about extensibility, it's quite simple to add your own NMEA sentence:
-  - declare its structure, with a default "bool isValid" and "int16_t fieldValidity" inside it.
-  - declare its type in "STRINGS_TYPES"
-  - create a parsing function based on existing ones
-  - declare your sentence type in the "dispatch" function.
-  - you're done!
-
-  It's that simple.
-
-  This header includes basic sentence description, at least those supported by LS20126.
-*/
-
 #pragma once
 
 #include <Arduino.h>
@@ -333,6 +304,31 @@ struct GPRMC {
     char mode;
 };
 
+/*
+    $GPGLL
+    Geographic Position, Latitude / Longitude and time.
+    $GPGLL,4448.55381,N,00038.83314,W,134006.00,A,A*7B
+    Sentence ID         $GPGLL
+    Latitude            4448.55381 (ddmm.mmmmm)
+    N/S indicator       N (N=north, S=south)
+    Longitude           00048.83314 (dddmm.mmmm)
+    E/W Indicator       W (E=east, W=West)
+    Fix time            134006.00 (13h40mn06.00s UTC)
+    Data Active or void A (or V)
+*/
+struct GPGLL {
+    bool isValid;
+    int16_t fieldValidity;
+
+    char latitude[15];
+    char north_south_indicator;
+    char longitude[15];
+    char east_west_indicator;
+    char fix_time[15];
+    char data_active;
+};
+
+
 #define GET_BIT(x, pos) (((x)&(1<<(pos)))!=0)
 #define SET_BIT(x, pos) ((x)|(1<<(pos)))
 #define IS_DIGIT(c) ((c)>='0' && (c)<='9')
@@ -349,7 +345,18 @@ public:
     bool dispatch(const char *str);
 
     //types
-    enum STRINGS_TYPES {UNKNOWN=0, TYPE_PLSR2451, TYPE_PLSR2452, TYPE_PLSR2457, TYPE_GPGGA, TYPE_GPGSA, TYPE_GPGSV, TYPE_HCHDG, TYPE_GPRMC};
+    enum STRINGS_TYPES {
+        UNKNOWN=0,
+        TYPE_PLSR2451,
+        TYPE_PLSR2452,
+        TYPE_PLSR2457,
+        TYPE_GPGGA,
+        TYPE_GPGSA,
+        TYPE_GPGSV,
+        TYPE_HCHDG,
+        TYPE_GPRMC,
+        TYPE_GPGLL
+    };
     STRINGS_TYPES getLastProcessedType() {return last_processed;}
 
 
@@ -362,6 +369,7 @@ public:
     bool parse_gpgsv(const char *str);
     bool parse_hchdg(const char *str);
     bool parse_gprmc(const char *str);
+    bool parse_gpgll(const char *str);
 
     PLSR2451 last_plsr2451 = {};
     PLSR2452 last_plsr2452 = {};
@@ -371,6 +379,7 @@ public:
     GPGSV    last_gpgsv = {};
     HCHDG    last_hchdg = {};
     GPRMC    last_gprmc = {};
+    GPGLL    last_gpgll = {};
 
 private:
     STRINGS_TYPES last_processed = UNKNOWN;
@@ -390,9 +399,18 @@ private:
 
     //calculus tools
 };
+/*
+$GPRMC,134006.00,A,4448.55381,N,00038.83314,W,0.205,,301219,,,A*6D
+$GPVTG,,T,,M,0.205,N,0.380,K,A*2F
+$GPGGA,134006.00,4448.55381,N,00038.83314,W,1,04,1.63,34.8,M,48.5,M,,*78
+$GPGSA,A,3,30,15,05,28,,,,,,,,,5.50,1.63,5.25*0C
+$GPGSV,3,1,10,05,40,188,32,07,03,063,29,08,01,019,,13,79,012,20*7D
+$GPGSV,3,2,10,15,53,302,27,17,01,121,36,20,09,322,21,28,53,089,41*7C
+$GPGSV,3,3,10,30,33,060,46,39,32,146,36*72
+$GPGLL,4448.55381,N,00038.83314,W,134006.00,A,A*7B
+*/
 
 /*
-
 Waiting for lock...
 
 $PLSR,245,1,215,0,1042,12,-16,260,20,0,2*2F

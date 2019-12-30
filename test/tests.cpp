@@ -50,12 +50,26 @@ void test_plsr2457(void) {
     TEST_ASSERT_EQUAL_INT16(0, parser.last_plsr2457.gps_speed_up);
 }
 
+void test_gpgll(void) {
+    const String testSentence = "$GPGLL,4448.55381,N,00038.83314,W,134006.00,A,A*7B";
+    NMEAParser parser;
+    TEST_ASSERT_TRUE(parser.dispatch(testSentence));
+    TEST_ASSERT_TRUE(parser.last_gpgll.isValid);
+    TEST_ASSERT_EQUAL_STRING("4448.55381", parser.last_gpgll.latitude);
+    TEST_ASSERT(parser.last_gpgll.north_south_indicator == 'N');
+    TEST_ASSERT_EQUAL_STRING("00038.83314", parser.last_gpgll.longitude);
+    TEST_ASSERT(parser.last_gpgll.east_west_indicator == 'W');
+    TEST_ASSERT_EQUAL_STRING("134006.00", parser.last_gpgll.fix_time);
+    TEST_ASSERT(parser.last_gpgll.data_active == 'A');
+}
+
 void process() {
     UNITY_BEGIN();
     RUN_TEST(test_unknown_type);
     RUN_TEST(test_plsr2451);
     RUN_TEST(test_plsr2452);
     RUN_TEST(test_plsr2457);
+    RUN_TEST(test_gpgll);
     UNITY_END();
 }
 

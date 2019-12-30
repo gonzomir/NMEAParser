@@ -25,10 +25,12 @@ bool NMEAParser::dispatch(const char *str) {
         else if (str[1] == 'G' && str[2] == 'P' && str[3] == 'G' && str[4] == 'S' && str[5] == 'A') return parse_gpgsa(str);
         //GPGSV
         else if (str[1] == 'G' && str[2] == 'P' && str[3] == 'G' && str[4] == 'S' && str[5] == 'V') return parse_gpgsv(str);
-        //HCHDG
-        else if (str[1] == 'H' && str[2] == 'C' && str[3] == 'H' && str[4] == 'D' && str[5] == 'G') return parse_hchdg(str);
         //GPRMC
         else if (str[1] == 'G' && str[2] == 'P' && str[3] == 'R' && str[4] == 'M' && str[5] == 'C') return parse_gprmc(str);
+        //GPGLL
+        else if (str[1] == 'G' && str[2] == 'P' && str[3] == 'G' && str[4] == 'L' && str[5] == 'L') return parse_gpgll(str);
+        //HCHDG
+        else if (str[1] == 'H' && str[2] == 'C' && str[3] == 'H' && str[4] == 'D' && str[5] == 'G') return parse_hchdg(str);
     }
     return false;
 }
@@ -199,6 +201,22 @@ bool NMEAParser::parse_gprmc(const char *str) {
     last_gprmc.isValid = ((scanned == 13) && check_checksum(str));
     last_processed = NMEAParser::TYPE_GPRMC;
     return last_gprmc.isValid;
+}
+
+bool NMEAParser::parse_gpgll(const char *str) {
+    checksum = 0;
+    scanned = my_sscanf(&last_gpgll.fieldValidity, str, "$GPGLL,%s,%c,%s,%c,%s,%c*%X",
+            last_gpgll.latitude,
+            &last_gpgll.north_south_indicator,
+            last_gpgll.longitude,
+            &last_gpgll.east_west_indicator,
+            last_gpgll.fix_time,
+            &last_gpgll.data_active,
+            &checksum);
+
+    last_gpgll.isValid = ((scanned == 7) && check_checksum(str));
+    last_processed = NMEAParser::TYPE_GPGLL;
+    return last_gpgll.isValid;
 }
 
 bool NMEAParser::check_checksum(const char *str) {
