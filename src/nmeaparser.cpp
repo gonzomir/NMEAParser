@@ -401,7 +401,7 @@ int16_t NMEAParser::my_sscanf(int16_t *field_validity, const char *src, const ch
             //compute an hexadecimal
             case 'X':
             case 'x': 
-                int *i = va_arg(ap, int16_t *);
+                i = va_arg(ap, int16_t *);
                 if (!*buf) *i = 0;
                 else {
                     if (!*(buf+1))

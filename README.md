@@ -28,3 +28,4 @@ It's quite simple to add your own NMEA sentence:
 # Todo
 - [ ] Add examples
 - [ ] Complete unit tests
+- [ ] Add way to compose sentences
