@@ -1,17 +1,8 @@
 #include "nmeaparser.h"
 
-#ifndef ARDUINO
-    #include <QDebug>
-#endif
-
-#ifdef ARDUINO
-    #include <stdarg.h>
-#endif
-
 NMEAParser::NMEAParser() {
     last_plsr2451.isValid = false;
 }
-
 
 bool NMEAParser::dispatch(const char *str) {
     if (!str[0]) return false;
@@ -37,7 +28,6 @@ bool NMEAParser::dispatch(const char *str) {
     }
     return false;
 }
-
 
 bool NMEAParser::parse_plsr2451(const char *str) {
     checksum=0;
@@ -207,8 +197,6 @@ bool NMEAParser::parse_gprmc(const char *str) {
     return last_gprmc.isValid;
 }
 
-
-//Check NMEA string's checksum againt what it should be
 bool NMEAParser::check_checksum(const char *str) {
     //compute normal checksum
     char calculated_sum = generate_checksum(str);
@@ -219,7 +207,7 @@ bool NMEAParser::check_checksum(const char *str) {
     while((*ptr) && (*ptr!='*')) ptr++;
     ptr++;
 
-    int retrieved_sum = 0;
+    int16_t retrieved_sum = 0;
     if (!*(ptr+1))
         retrieved_sum = my_atoh(*ptr);
     else if (!*(ptr+2))
@@ -229,12 +217,6 @@ bool NMEAParser::check_checksum(const char *str) {
     return (calculated_sum == retrieved_sum);
 }
 
-
-
-
-
-
-
 char NMEAParser::generate_checksum(const char *str) {
     char *ptr = (char*)(str+1);
     char sum=0;
@@ -242,7 +224,7 @@ char NMEAParser::generate_checksum(const char *str) {
     return sum;
 }
 
-int NMEAParser::my_atoh(char a) {
+int16_t NMEAParser::my_atoh(char a) {
     if (a >= 'A' && a <= 'F')
         return a - 'A' + 10;
     else if (a >= 'a' && a <= 'f')
@@ -251,7 +233,7 @@ int NMEAParser::my_atoh(char a) {
         return a - '0';
 }
 
-char *NMEAParser::my_strncpy(char *dst, const char *src, int n) {
+char *NMEAParser::my_strncpy(char *dst, const char *src, int16_t n) {
     if (n!=0) {
         char *d = dst;
         const char *s = src;
@@ -265,14 +247,14 @@ char *NMEAParser::my_strncpy(char *dst, const char *src, int n) {
     return dst;
 }
 
-int NMEAParser::my_strlen(const char* str) {
-    int s = 0;
-    while(str[s++]) ;
+int16_t NMEAParser::my_strlen(const char* str) {
+    int16_t s = 0;
+    while(str[s++]);
     return s;
 }
 
-long NMEAParser::my_atoi(const char *str) {
-    long ret = 0;
+in32t_t NMEAParser::my_atoi(const char *str) {
+    in32t_t ret = 0;
     while (IS_DIGIT(*str))
         ret = 10 * ret + *str++ - '0';
     return ret;
@@ -280,8 +262,8 @@ long NMEAParser::my_atoi(const char *str) {
 
 float NMEAParser::my_atof(const char *s) {
     float a = 0.0;
-    int e = 0;
-    int c;
+    int16_t e = 0;
+    int16_t c;
     while ((c = *s++) != '\0' && IS_DIGIT(c)) {
         a = a*10.0 + (c - '0');
     }
@@ -292,8 +274,8 @@ float NMEAParser::my_atof(const char *s) {
         }
     }
     if (c == 'e' || c == 'E') {
-        int sign = 1;
-        int i = 0;
+        int16_t sign = 1;
+        int16_t i = 0;
         c = *s++;
         if (c == '+')
             c = *s++;
@@ -318,14 +300,13 @@ float NMEAParser::my_atof(const char *s) {
     return a;
 }
 
-
-int NMEAParser::my_sscanf(int *field_validity, const char *src, const char *format, ... ) {
+int16_t NMEAParser::my_sscanf(int16_t *field_validity, const char *src, const char *format, ... ) {
     va_list ap;
 
     //pointers to types that can be converted
     float *f;
-    int *i;
-    int conv = 0, index;
+    int16_t *i;
+    int16_t conv = 0, index;
     char *a, *fp, *sp = (char*)src, buf[128] = {'\0'};
 
     va_start(ap, format);
@@ -359,7 +340,7 @@ int NMEAParser::my_sscanf(int *field_validity, const char *src, const char *form
             //compute an int
             case 'i':
             case 'd':
-                i = va_arg(ap, int *);
+                i = va_arg(ap, int16_t *);
                 if (!*buf) *i = 0;
                 else {
                     *i = my_atoi(buf);
@@ -390,7 +371,7 @@ int NMEAParser::my_sscanf(int *field_validity, const char *src, const char *form
             //compute an hexadecimal
             case 'X':
             case 'x':
-                i = va_arg(ap, int *);
+                i = va_arg(ap, int16_t *);
                 if (!*buf) *i = 0;
                 else {
                     if (!*(buf+1))

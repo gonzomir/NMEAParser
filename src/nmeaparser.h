@@ -16,7 +16,7 @@
     when GPS works indoor. Default sscanf sees empty fields as errors. Mine parses them fine.
 
   Talking about extensibility, it's quite simple to add your own NMEA sentence:
-  - declare its structure, with a default "bool isValid" and "int fieldValidity" inside it.
+  - declare its structure, with a default "bool isValid" and "int16_t fieldValidity" inside it.
   - declare its type in "STRINGS_TYPES"
   - create a parsing function based on existing ones
   - declare your sentence type in the "dispatch" function.
@@ -26,24 +26,21 @@
 
   This header includes basic sentence description, at least those supported by LS20126.
 */
+#pragma once
 
-
-
-#ifndef NMEAPARSER_H
-#define NMEAPARSER_H
-
+//#include <Arduino.h>
+#include <stdarg.h>
 
 /*
     Arduino types
     char = 1 byte
     byte = 1 byte, unsigned by default
-    int = 2bytes, signed by default
+    int16_t = 2bytes, signed by default
     word = unsigned int
     long = 4 bytes, signed
 */
 
 typedef unsigned char byte;
-
 
 /*
     Checksum = 8bit exclusive OR of all characters, excluding '$' and '*'
@@ -65,20 +62,19 @@ typedef unsigned char byte;
     Current Calibration 2 (non zero: valid, 0=not valid)
     Checksum            *1D
 */
-
 struct PLSR2451 {
     bool isValid;           //this tells is struct's content is issued from a valid sentence. If not, do not use struct's datas.
-    int fieldValidity;      //each bit of this int telle if the corresponding field is valid of not.
+    int16_t fieldValidity;      //each bit of this int16_t telle if the corresponding field is valid of not.
 
-    int direction;
-    int calibration_status;
-    int field_intensity;
-    int acceleration_x;
-    int acceleration_y;
-    int acceleration_z;
-    int temperature;
-    int mounting_mode;
-    int current_calibration;
+    int16_t direction;
+    int16_t calibration_status;
+    int16_t field_intensity;
+    int16_t acceleration_x;
+    int16_t acceleration_y;
+    int16_t acceleration_z;
+    int16_t temperature;
+    int16_t mounting_mode;
+    int16_t current_calibration;
 };
 
 /*
@@ -99,20 +95,19 @@ struct PLSR2451 {
     Zz                  4075
     Checksum            *11
 */
-
 struct PLSR2452 {
     bool isValid;
-    int fieldValidity;
+    int16_t fieldValidity;
 
-    int xx;
-    int yx;
-    int zx;
-    int xy;
-    int yy;
-    int zy;
-    int xz;
-    int yz;
-    int zz;
+    int16_t xx;
+    int16_t yx;
+    int16_t zx;
+    int16_t xy;
+    int16_t yy;
+    int16_t zy;
+    int16_t xz;
+    int16_t yz;
+    int16_t zz;
 };
 
 /*
@@ -124,16 +119,14 @@ struct PLSR2452 {
     GPS Speed (up)      9
     Checksum             *17
 */
-
 struct PLSR2457 {
     bool isValid;
-    int fieldValidity;
+    int16_t fieldValidity;
 
-    int gps_speed_east;
-    int gps_speed_north;
-    int gps_speed_up;
+    int16_t gps_speed_east;
+    int16_t gps_speed_north;
+    int16_t gps_speed_up;
 };
-
 
 /*
     $GPGGA
@@ -163,25 +156,24 @@ struct PLSR2457 {
     Station ID          0000 (DGPS Station ID number)
     Checksum            *52
 */
-
 struct GPGGA {
     bool isValid;
-    int fieldValidity;
+    int16_t fieldValidity;
 
     char utc_time[15];
     char latitude[15];
     char north_south_indicator;
     char longitude[15];
     char east_west_indicator;
-    int position_fix;
-    int satellites_used;
+    int16_t position_fix;
+    int16_t satellites_used;
     float hdop;
     float msl_altitude;
     char msl_unit[5];
     float geoid_separation;
     char geoid_unit[5];
     float age_of_diff_corr;
-    int station_id;
+    int16_t station_id;
 };
 
 /*
@@ -207,31 +199,28 @@ struct GPGGA {
     VDOP                4.3 (Vertical Dilution of Precision, 1.0 is perfect)
     Checksum            *3C
 */
-
 struct GPGSA {
     bool isValid;
-    int fieldValidity;
+    int16_t fieldValidity;
 
     char mode1;
-    int mode2;
-    int sat_channel_1;
-    int sat_channel_2;
-    int sat_channel_3;
-    int sat_channel_4;
-    int sat_channel_5;
-    int sat_channel_6;
-    int sat_channel_7;
-    int sat_channel_8;
-    int sat_channel_9;
-    int sat_channel_10;
-    int sat_channel_11;
-    int sat_channel_12;
+    int16_t mode2;
+    int16_t sat_channel_1;
+    int16_t sat_channel_2;
+    int16_t sat_channel_3;
+    int16_t sat_channel_4;
+    int16_t sat_channel_5;
+    int16_t sat_channel_6;
+    int16_t sat_channel_7;
+    int16_t sat_channel_8;
+    int16_t sat_channel_9;
+    int16_t sat_channel_10;
+    int16_t sat_channel_11;
+    int16_t sat_channel_12;
     float pdop;
     float hdop;
     float vdop;
 };
-
-
 
 /*
     $GPGSV
@@ -259,31 +248,29 @@ struct GPGSA {
     SNR                 39 ((db-Hz) channel 4, from 00 to 99, null when not tracking)
     Checksum            *7F
 */
-
-
 struct GPGSV {
     bool isValid;
-    int fieldValidity;
+    int16_t fieldValidity;
 
-    int number_of_messages;
-    int message_idx;
-    int sats_in_view;
-    int sat1_id;
-    int sat1_elevation;
-    int sat1_azimuth;
-    int sat1_snr;
-    int sat2_id;
-    int sat2_elevation;
-    int sat2_azimuth;
-    int sat2_snr;
-    int sat3_id;
-    int sat3_elevation;
-    int sat3_azimuth;
-    int sat3_snr;
-    int sat4_id;
-    int sat4_elevation;
-    int sat4_azimuth;
-    int sat4_snr;
+    int16_t number_of_messages;
+    int16_t message_idx;
+    int16_t sats_in_view;
+    int16_t sat1_id;
+    int16_t sat1_elevation;
+    int16_t sat1_azimuth;
+    int16_t sat1_snr;
+    int16_t sat2_id;
+    int16_t sat2_elevation;
+    int16_t sat2_azimuth;
+    int16_t sat2_snr;
+    int16_t sat3_id;
+    int16_t sat3_elevation;
+    int16_t sat3_azimuth;
+    int16_t sat3_snr;
+    int16_t sat4_id;
+    int16_t sat4_elevation;
+    int16_t sat4_azimuth;
+    int16_t sat4_snr;
 };
 
 /*
@@ -298,12 +285,11 @@ struct GPGSV {
     Variation direction W (E=easterly, W=westerly)
     Checksum            *24
 */
-
 struct HCHDG {
     bool isValid;
-    int fieldValidity;
+    int16_t fieldValidity;
 
-    int heading;
+    int16_t heading;
     float deviation;
     char dev_direction;
     float variation;
@@ -328,10 +314,9 @@ struct HCHDG {
     Mode                A (A=autonomous, D=DGPS, E=DR)
     Checksum            *33
 */
-
 struct GPRMC {
     bool isValid;
-    int fieldValidity;
+    int16_t fieldValidity;
 
     char utc_time[15];
     char status;
@@ -388,23 +373,21 @@ public:
 private:
     STRINGS_TYPES last_processed;
 
-    int checksum;
-    int scanned;
+    int16_t checksum;
+    int16_t scanned;
 
     //string parsing subfunctions
-    int my_atoh(char a);
-    char *my_strncpy(char *dst, const char *src, int n);
-    int my_strlen(const char* str);
-    long my_atoi(const char *str);
+    int16_t my_atoh(char a);
+    char *my_strncpy(char *dst, const char *src, int16_t n);
+    int16_t my_strlen(const char* str);
+    in32t_t my_atoi(const char *str);
     float my_atof(const char *s);
 
     //main parser
-    int my_sscanf(int *field_validity, const char *src, const char *format, ... );
+    int16_t my_sscanf(int16_t *field_validity, const char *src, const char *format, ... );
 
     //calculus tools
 };
-
-#endif // NMEAPARSER_H
 
 /*
 
