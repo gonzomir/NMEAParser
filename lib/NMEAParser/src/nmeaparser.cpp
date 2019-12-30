@@ -343,26 +343,31 @@ int16_t NMEAParser::my_sscanf(int16_t *field_validity, const char *src, const ch
         while (*fp != '%') fp++;
 
         if (*fp == '%') {
+            float *f;
+            int16_t *i;
+
             switch (*++fp) {
             //compute an int
             case 'i':
-            case 'd':
-                int16_t *i = va_arg(ap, int16_t *);
+            case 'd': {
+                i = va_arg(ap, int16_t *);
                 if (!*buf) *i = 0;
                 else {
                     *i = my_atoi(buf);
                     *field_validity = SET_BIT(*field_validity, conv);
                 }
                 break;
+            }
             //compute a float
-            case 'f':
-                float *f = va_arg(ap, float *);
+            case 'f': {
+                f = va_arg(ap, float *);
                 if (!*buf) *f = 0;
                 else {
                     *f = (float)my_atof(buf);
                     *field_validity = SET_BIT(*field_validity, conv);
                 }
                 break;
+            }
             //compute a string
             case 's':
                 a = va_arg(ap, char *);
@@ -377,8 +382,8 @@ int16_t NMEAParser::my_sscanf(int16_t *field_validity, const char *src, const ch
                 break;
             //compute an hexadecimal
             case 'X':
-            case 'x':
-                i = va_arg(ap, int16_t *);
+            case 'x': 
+                int *i = va_arg(ap, int16_t *);
                 if (!*buf) *i = 0;
                 else {
                     if (!*(buf+1))

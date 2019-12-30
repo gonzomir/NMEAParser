@@ -24,10 +24,38 @@ void test_plsr2451(void) {
     TEST_ASSERT_EQUAL_INT16(2, parser.last_plsr2451.current_calibration);
 }
 
+void test_plsr2452(void) {
+    const String testSentence = "$PLSR,245,2,-3129,2622,328,-2614,-2996,-984,-388,-961,3963*36";
+    NMEAParser parser;
+    TEST_ASSERT_TRUE(parser.dispatch(testSentence));
+    TEST_ASSERT_TRUE(parser.last_plsr2452.isValid);
+    TEST_ASSERT_EQUAL_INT16(-3129, parser.last_plsr2452.xx);
+    TEST_ASSERT_EQUAL_INT16(2622, parser.last_plsr2452.yx);
+    TEST_ASSERT_EQUAL_INT16(328, parser.last_plsr2452.zx);
+    TEST_ASSERT_EQUAL_INT16(-2614, parser.last_plsr2452.xy);
+    TEST_ASSERT_EQUAL_INT16(-2996, parser.last_plsr2452.yy);
+    TEST_ASSERT_EQUAL_INT16(-984, parser.last_plsr2452.zy);
+    TEST_ASSERT_EQUAL_INT16(-388, parser.last_plsr2452.xz);
+    TEST_ASSERT_EQUAL_INT16(-961, parser.last_plsr2452.yz);
+    TEST_ASSERT_EQUAL_INT16(3963, parser.last_plsr2452.zz);
+}
+
+void test_plsr2457(void) {
+    const String testSentence = "$PLSR,245,7,-9,1,0*20";
+    NMEAParser parser;
+    TEST_ASSERT_TRUE(parser.dispatch(testSentence));
+    TEST_ASSERT_TRUE(parser.last_plsr2457.isValid);
+    TEST_ASSERT_EQUAL_INT16(-9, parser.last_plsr2457.gps_speed_east);
+    TEST_ASSERT_EQUAL_INT16(1, parser.last_plsr2457.gps_speed_north);
+    TEST_ASSERT_EQUAL_INT16(0, parser.last_plsr2457.gps_speed_up);
+}
+
 void process() {
     UNITY_BEGIN();
     RUN_TEST(test_unknown_type);
     RUN_TEST(test_plsr2451);
+    RUN_TEST(test_plsr2452);
+    RUN_TEST(test_plsr2457);
     UNITY_END();
 }
 
