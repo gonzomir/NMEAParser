@@ -79,6 +79,17 @@ void test_gpvtg(void) {
     TEST_ASSERT_EQUAL_CHAR('A', parser.last_gpvtg.mode);
 }
 
+void test_gptxt(void) {
+    const String testSentence = "$GPTXT,01,01,02,ROM CORE 1.00 (59842) Jun 27 2012 17:43:52*59";
+    NMEAParser parser;
+    TEST_ASSERT_TRUE(parser.dispatch(testSentence));
+    TEST_ASSERT_TRUE(parser.last_gptxt.isValid);
+    TEST_ASSERT_EQUAL_INT8(1, parser.last_gptxt.number_of_messages);
+    TEST_ASSERT_EQUAL_INT8(1, parser.last_gptxt.sentence_number);
+    TEST_ASSERT_EQUAL_INT8(2, parser.last_gptxt.text_identifier);
+    TEST_ASSERT_EQUAL_STRING(const_cast<const char*>(parser.last_gptxt.message), "ROM CORE 1.00 (59842) Jun 27 2012 17:43:52");
+}
+
 
 void process() {
     UNITY_BEGIN();
@@ -88,6 +99,7 @@ void process() {
     RUN_TEST(test_plsr2457);
     RUN_TEST(test_gpgll);
     RUN_TEST(test_gpvtg);
+    RUN_TEST(test_gptxt);
     UNITY_END();
 }
 
@@ -103,10 +115,6 @@ void setup() {
 }
 
 void loop() {
-    digitalWrite(13, HIGH);
-    delay(100);
-    digitalWrite(13, LOW);
-    delay(500);
 }
 
 #else

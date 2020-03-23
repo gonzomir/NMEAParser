@@ -127,7 +127,7 @@ struct PLSR2457 {
     MSL Altitude        101.6 (Above Mean Sea Level)
     Unit                M (meters)
     Geoid separation    47.4 (Height of geoid (mean sea level) above WGS84 ellipsoid
-)    Unit                M (meters)
+    Unit                M (meters)
     Age of diff corr.   (tims since the last DGPS update)
     Station ID          0000 (DGPS Station ID number)
     Checksum            *52
@@ -362,6 +362,25 @@ struct GPVTG {
     char mode;
 };
 
+/*
+    $GPTXT
+    Text message
+    $GPTXT,01,01,02,u-blox ag - www.u-blox.com*50
+    01                          Total number of messages, 01 to 99
+    01                          Sentence number, 01 to 99
+    02                          Text identifier, 01 to 99
+    u-blox ag - www.u-blox.com  Text message, up to 61 characters
+    *50                         Checksum
+*/
+struct GPTXT {
+    bool isValid;
+    int16_t fieldValidity;
+
+    uint8_t number_of_messages;
+    uint8_t sentence_number;
+    uint8_t text_identifier;
+    char message[70];
+};
 
 #define GET_BIT(x, pos) (((x)&(1<<(pos)))!=0)
 #define SET_BIT(x, pos) ((x)|(1<<(pos)))
@@ -390,7 +409,8 @@ public:
         TYPE_HCHDG,
         TYPE_GPRMC,
         TYPE_GPGLL,
-        TYPE_GPVTG
+        TYPE_GPVTG,
+        TYPE_GPTXT
     };
     STRINGS_TYPES getLastProcessedType() {return last_processed;}
 
@@ -406,6 +426,7 @@ public:
     bool parse_gprmc(const char *str);
     bool parse_gpgll(const char *str);
     bool parse_gpvtg(const char *str);
+    bool parse_gptxt(const char *str);
 
     PLSR2451 last_plsr2451 = {};
     PLSR2452 last_plsr2452 = {};
@@ -417,6 +438,7 @@ public:
     GPRMC    last_gprmc = {};
     GPGLL    last_gpgll = {};
     GPVTG    last_gpvtg = {}; 
+    GPTXT    last_gptxt = {};
 
 private:
     STRINGS_TYPES last_processed = UNKNOWN;

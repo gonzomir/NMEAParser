@@ -29,6 +29,7 @@ It's quite simple to add your own NMEA sentence:
 
 - [NMEA Reference Manual](https://www.sparkfun.com/datasheets/GPS/NMEA%20Reference%20Manual-Rev2.1-Dec07.pdf)
 - [NMEA Sentences Reference](https://www.gpsinformation.org/dale/nmea.htm)
+- [NMEA 0183 Amendment (adds $GPTXT)](https://www.nmea.org/Assets/20160520%20txt%20amendment.pdf)
 
 # Todo
 - [ ] Add examples
