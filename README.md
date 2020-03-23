@@ -1,5 +1,5 @@
 <p align="center">
-	<img src="https://gitlab.com/X99/NMEAParser/raw/master/logo.png" width="40%">
+	<img src="logo.svg" width="30%">
 </p>
 
 NMEAParser is a library that aims at drastically simplifiying the parsing of [NMEA](https://www.wikiwand.com/en/NMEA_0183) sentences. These can be from a GPS, a gyrocompass or any device that complies with the NMEA 0183 standard.
@@ -29,3 +29,7 @@ It's quite simple to add your own NMEA sentence:
 - [ ] Add examples
 - [ ] Complete unit tests
 - [ ] Add way to compose sentences
+
+# Copyright
+## Logo
+Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
