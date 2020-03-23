@@ -226,7 +226,7 @@ bool NMEAParser::check_checksum(const char *str) {
 
     //retrieve checksum from the str
     //go to the '*'
-    char *ptr = (char*)str;
+    char *ptr = const_cast<char*>str;
     while((*ptr) && (*ptr!='*')) ptr++;
     ptr++;
 
@@ -241,7 +241,7 @@ bool NMEAParser::check_checksum(const char *str) {
 }
 
 char NMEAParser::generate_checksum(const char *str) {
-    char *ptr = (char*)(str+1);
+    char *ptr = const_cast<char*>(str+1);
     char sum=0;
     while(*ptr && *ptr!='*') sum ^= *(ptr++);
     return sum;
@@ -305,9 +305,9 @@ float NMEAParser::my_atof(const char *s) {
         int16_t sign = 1;
         int16_t i = 0;
         c = *s++;
-        if (c == '+')
+        if (c == '+') {
             c = *s++;
-        else if (c == '-') {
+        } else if (c == '-') {
             c = *s++;
             sign = -1;
         }
@@ -333,7 +333,7 @@ int16_t NMEAParser::my_sscanf(int16_t *field_validity, const char *src, const ch
 
     //pointers to types that can be converted
     int16_t conv = 0, index;
-    char *a, *fp, *sp = (char*)src, buf[128] = {'\0'};
+    char *a, *fp, *sp = const_cast<char*>src, buf[128] = {'\0'};
 
     va_start(ap, format);
 
@@ -341,7 +341,7 @@ int16_t NMEAParser::my_sscanf(int16_t *field_validity, const char *src, const ch
     *field_validity = 0;
 
     //for every character of the format string
-    for (fp = (char*)format; *fp != '\0'; fp++) {
+    for (fp = const_cast<char*>format; *fp != '\0'; fp++) {
         //if the format string and src string have the same character here, step forward into both
         if (*fp == *sp) {
             sp++;
@@ -369,8 +369,9 @@ int16_t NMEAParser::my_sscanf(int16_t *field_validity, const char *src, const ch
             case 'i':
             case 'd': {
                 i = va_arg(ap, int16_t *);
-                if (!*buf) *i = 0;
-                else {
+                if (!*buf) {
+                    *i = 0;
+                } else {
                     *i = my_atoi(buf);
                     *field_validity = SET_BIT(*field_validity, conv);
                 }
@@ -379,9 +380,10 @@ int16_t NMEAParser::my_sscanf(int16_t *field_validity, const char *src, const ch
             //compute a float
             case 'f': {
                 float *f = va_arg(ap, float *);
-                if (!*buf) *f = 0;
-                else {
-                    *f = (float)my_atof(buf);
+                if (!*buf) {
+                    *f = 0;
+                } else {
+                    *f = static_cast<float>my_atof(buf);
                     *field_validity = SET_BIT(*field_validity, conv);
                 }
                 break;
@@ -402,8 +404,9 @@ int16_t NMEAParser::my_sscanf(int16_t *field_validity, const char *src, const ch
             case 'X':
             case 'x': 
                 i = va_arg(ap, int16_t *);
-                if (!*buf) *i = 0;
-                else {
+                if (!*buf) {
+                    *i = 0;
+                } else {
                     if (!*(buf+1))
                         *i = my_atoh(*buf);
                     else if (!*(buf+2))
