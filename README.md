@@ -25,6 +25,10 @@ It's quite simple to add your own NMEA sentence:
 - declare your sentence type in the `dispatch` function.
 - you're done!
 
+## References
+
+- [NMEA Sentences Reference](https://www.gpsinformation.org/dale/nmea.htm)
+
 # Todo
 - [ ] Add examples
 - [ ] Complete unit tests
