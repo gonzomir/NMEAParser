@@ -332,6 +332,36 @@ struct GPGLL {
     char data_active;
 };
 
+/*
+    $GPVTG
+    VTG - Velocity made good.
+    $GPVTG,054.7,T,034.4,M,005.5,N,010.2,K*48
+    VTG          Track made good and ground speed
+    054.7,T      True track made good (degrees)
+    034.4,M      Magnetic track made good
+    005.5,N      Ground speed, knots
+    010.2,K      Ground speed, Kilometers per hour
+    *48          Checksum
+
+    An extra field might exit right before checksum:
+    Mode: A=Autonomous, D=DGPS, E=DR
+*/
+struct GPVTG {
+    bool isValid;
+    int16_t fieldValidity;
+
+    float measured_heading_1;
+    char north_type_1;
+    float measured_heading_2;
+    char north_type_2;
+    float ground_speed_1;
+    char ground_speed_unit_1;
+    float ground_speed_2;
+    char ground_speed_unit_2;
+
+    char mode;
+};
+
 
 #define GET_BIT(x, pos) (((x)&(1<<(pos)))!=0)
 #define SET_BIT(x, pos) ((x)|(1<<(pos)))
@@ -359,7 +389,8 @@ public:
         TYPE_GPGSV,
         TYPE_HCHDG,
         TYPE_GPRMC,
-        TYPE_GPGLL
+        TYPE_GPGLL,
+        TYPE_GPVTG
     };
     STRINGS_TYPES getLastProcessedType() {return last_processed;}
 
@@ -374,6 +405,7 @@ public:
     bool parse_hchdg(const char *str);
     bool parse_gprmc(const char *str);
     bool parse_gpgll(const char *str);
+    bool parse_gpvtg(const char *str);
 
     PLSR2451 last_plsr2451 = {};
     PLSR2452 last_plsr2452 = {};
@@ -384,6 +416,7 @@ public:
     HCHDG    last_hchdg = {};
     GPRMC    last_gprmc = {};
     GPGLL    last_gpgll = {};
+    GPVTG    last_gpvtg = {}; 
 
 private:
     STRINGS_TYPES last_processed = UNKNOWN;
@@ -403,15 +436,26 @@ private:
 
     //calculus tools
 };
+
 /*
-$GPRMC,134006.00,A,4448.55381,N,00038.83314,W,0.205,,301219,,,A*6D
-$GPVTG,,T,,M,0.205,N,0.380,K,A*2F
-$GPGGA,134006.00,4448.55381,N,00038.83314,W,1,04,1.63,34.8,M,48.5,M,,*78
-$GPGSA,A,3,30,15,05,28,,,,,,,,,5.50,1.63,5.25*0C
-$GPGSV,3,1,10,05,40,188,32,07,03,063,29,08,01,019,,13,79,012,20*7D
-$GPGSV,3,2,10,15,53,302,27,17,01,121,36,20,09,322,21,28,53,089,41*7C
-$GPGSV,3,3,10,30,33,060,46,39,32,146,36*72
-$GPGLL,4448.55381,N,00038.83314,W,134006.00,A,A*7B
+$GPTXT,01,01,02,u-blox ag - www.u-blox.com*50
+$GPTXT,01,01,02,HW  UBX-G70xx   00070000 *77
+$GPTXT,01,01,02,ROM CORE 1.00 (59842) Jun 27 2012 17:43:52*59
+$GPTXT,01,01,02,PROTVER 14.00*1E
+$GPTXT,01,01,02,ANTSUPERV=AC SD PDoS SR*20
+$GPTXT,01,01,02,ANTSTATUS=OK*3B
+$GPTXT,01,01,02,LLC FFFFFFFF-FFFFFFFD-FFFFFFFF-FFFFFFFF-FFFFFFFD*2E
+*/
+
+/*
+$GPRMC,164047.00,A,4448.56047,N,00038.83771,W,0.097,,230320,,,A*61
+$GPVTG,,T,,M,0.097,N,0.179,K,A*22
+$GPGGA,164047.00,4448.56047,N,00038.83771,W,1,08,1.11,47.0,M,48.5,M,,*70
+$GPGSA,A,3,05,29,20,31,16,26,21,25,,,,,1.85,1.11,1.49*0A
+$GPGSV,3,1,10,05,07,035,38,16,41,305,22,18,57,074,42,20,13,143,27*7C
+$GPGSV,3,2,10,21,70,121,33,25,10,121,40,26,72,306,32,29,33,062,29*7E
+$GPGSV,3,3,10,31,43,208,33,39,32,146,29*74
+$GPGLL,4448.56047,N,00038.83771,W,164047.00,A,A*76
 */
 
 /*

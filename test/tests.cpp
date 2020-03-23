@@ -63,6 +63,23 @@ void test_gpgll(void) {
     TEST_ASSERT(parser.last_gpgll.data_active == 'A');
 }
 
+void test_gpvtg(void) {
+    const String testSentence = "$GPVTG,,T,,M,0.097,N,0.179,K,A*22";
+    NMEAParser parser;
+    TEST_ASSERT_TRUE(parser.dispatch(testSentence));
+    TEST_ASSERT_TRUE(parser.last_gpvtg.isValid);
+    TEST_ASSERT_EQUAL_FLOAT(0, parser.last_gpvtg.measured_heading_1);
+    TEST_ASSERT_EQUAL_CHAR('T', parser.last_gpvtg.north_type_1);
+    TEST_ASSERT_EQUAL_FLOAT(0, parser.last_gpvtg.measured_heading_2);
+    TEST_ASSERT_EQUAL_CHAR('M', parser.last_gpvtg.north_type_2);
+    TEST_ASSERT_EQUAL_FLOAT(0.097, parser.last_gpvtg.ground_speed_1);
+    TEST_ASSERT_EQUAL_CHAR('N', parser.last_gpvtg.ground_speed_unit_1);
+    TEST_ASSERT_EQUAL_FLOAT(0.179, parser.last_gpvtg.ground_speed_2);
+    TEST_ASSERT_EQUAL_CHAR('K', parser.last_gpvtg.ground_speed_unit_2);
+    TEST_ASSERT_EQUAL_CHAR('A', parser.last_gpvtg.mode);
+}
+
+
 void process() {
     UNITY_BEGIN();
     RUN_TEST(test_unknown_type);
@@ -70,6 +87,7 @@ void process() {
     RUN_TEST(test_plsr2452);
     RUN_TEST(test_plsr2457);
     RUN_TEST(test_gpgll);
+    RUN_TEST(test_gpvtg);
     UNITY_END();
 }
 
