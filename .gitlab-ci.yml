@@ -1,0 +1,43 @@
+# Different stages the CI/CD pipeline will go through, in order.
+# If more than one job is located
+
+# References:
+# - https://github.com/SonarOpenCommunity/sonar-cxx/blob/master/sonar-cxx-plugin/src/samples/SampleProject2/Makefile
+
+stages:
+  - test
+
+image:
+  name: db99/sonar-scanner-cli:latest
+  entrypoint: [""]
+variables:
+  SONAR_TOKEN: "9936795bd0d6bf58585d1a402236b548c9ede860"
+  SONAR_HOST_URL: "https://sonar.x99.fr"
+  GIT_DEPTH: 0
+sonarqube-check:
+  stage: test
+  script:
+    - cppcheck --xml --xml-version=2 src lib include 2> cppcheck.xml 
+    - sonar-scanner -X -Dsonar.projectKey=NMEAParser -Dsonar.sources=. -Dsonar.host.url=https://sonar.x99.fr -Dsonar.login=9936795bd0d6bf58585d1a402236b548c9ede860 -Dsonar.sourceEncoding=UTF-8 -Dsonar.cxx.cppcheck.reportPath=cppcheck.xml
+  allow_failure: true
+
+cpplint:
+  stage: test
+  image: python:latest
+  script: 
+    - python -m pip install cpplint
+    - cpplint --filter=-whitespace,-legal/copyright,-readability/multiline_comment --linelength=180 --recursive src/* include/* &> cpplint.txt
+  artifacts:
+    paths:
+      - cpplint.txt
+
+flawfinder:
+  stage: test
+  image: python:latest
+  script: 
+    - python -m pip install flawfinder
+    - flawfinder --html -DQS include lib src test > flawfinder.html
+  artifacts:
+    paths:
+      - flawfinder.html
+  allow_failure: true

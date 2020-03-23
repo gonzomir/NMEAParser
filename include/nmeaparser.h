@@ -1,6 +1,10 @@
 #pragma once
 
-#include <Arduino.h>
+#ifdef ARDUINO
+    #include <Arduino.h>
+#else
+    #include <stdint.h>
+#endif
 #include <stdarg.h>
 
 /*

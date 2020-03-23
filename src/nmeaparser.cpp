@@ -9,7 +9,8 @@ bool NMEAParser::dispatch(const String str) {
 }
 
 bool NMEAParser::dispatch(const char *str) {
-    if (!str[0]) return false;
+    if (!str[0])
+        return false;
 
     //check NMEA string type
     if (str[0] == '$') {
@@ -361,7 +362,6 @@ int16_t NMEAParser::my_sscanf(int16_t *field_validity, const char *src, const ch
         while (*fp != '%') fp++;
 
         if (*fp == '%') {
-            float *f;
             int16_t *i;
 
             switch (*++fp) {
@@ -378,7 +378,7 @@ int16_t NMEAParser::my_sscanf(int16_t *field_validity, const char *src, const ch
             }
             //compute a float
             case 'f': {
-                f = va_arg(ap, float *);
+                float *f = va_arg(ap, float *);
                 if (!*buf) *f = 0;
                 else {
                     *f = (float)my_atof(buf);
