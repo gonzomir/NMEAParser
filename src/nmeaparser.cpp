@@ -32,6 +32,8 @@ bool NMEAParser::dispatch(const char *str) {
         else if (str[1] == 'G' && str[2] == 'P' && str[3] == 'G' && str[4] == 'L' && str[5] == 'L') return parse_gpgll(str);
         //HCHDG
         else if (str[1] == 'H' && str[2] == 'C' && str[3] == 'H' && str[4] == 'D' && str[5] == 'G') return parse_hchdg(str);
+        //GPVTG
+        else if (str[1] == 'G' && str[2] == 'P' && str[3] == 'V' && str[4] == 'T' && str[5] == 'G') return parse_gpvtg(str);
     }
     return false;
 }
@@ -220,13 +222,37 @@ bool NMEAParser::parse_gpgll(const char *str) {
     return last_gpgll.isValid;
 }
 
+bool NMEAParser::parse_gpvtg(const char *str) {
+    checksum = 0;
+    scanned = my_sscanf(&last_gpvtg.fieldValidity, str, "$GPVTG,%f,%c,%f,%c,%f,%c,%f,%c,%c*%X",
+            &last_gpvtg.measured_heading_1,
+            &last_gpvtg.north_type_1,
+            &last_gpvtg.measured_heading_2,
+            &last_gpvtg.north_type_2,
+            &last_gpvtg.ground_speed_1,
+            &last_gpvtg.ground_speed_unit_1,
+            &last_gpvtg.ground_speed_2,
+            &last_gpvtg.ground_speed_unit_2,
+            &last_gpvtg.mode,
+            &checksum);
+
+    last_gpvtg.isValid = ((scanned == 10) && check_checksum(str));
+    last_processed = NMEAParser::TYPE_GPVTG;
+    return last_gpvtg.isValid;
+} 
+
+
+
+
+
+
 bool NMEAParser::check_checksum(const char *str) {
     //compute normal checksum
     char calculated_sum = generate_checksum(str);
 
     //retrieve checksum from the str
     //go to the '*'
-    char *ptr = const_cast<char*>str;
+    char *ptr = const_cast<char*>(str);
     while((*ptr) && (*ptr!='*')) ptr++;
     ptr++;
 
@@ -333,7 +359,7 @@ int16_t NMEAParser::my_sscanf(int16_t *field_validity, const char *src, const ch
 
     //pointers to types that can be converted
     int16_t conv = 0, index;
-    char *a, *fp, *sp = const_cast<char*>src, buf[128] = {'\0'};
+    char *a, *fp, *sp = const_cast<char*>(src), buf[128] = {'\0'};
 
     va_start(ap, format);
 
@@ -341,7 +367,7 @@ int16_t NMEAParser::my_sscanf(int16_t *field_validity, const char *src, const ch
     *field_validity = 0;
 
     //for every character of the format string
-    for (fp = const_cast<char*>format; *fp != '\0'; fp++) {
+    for (fp = const_cast<char*>(format); *fp != '\0'; fp++) {
         //if the format string and src string have the same character here, step forward into both
         if (*fp == *sp) {
             sp++;
@@ -383,7 +409,7 @@ int16_t NMEAParser::my_sscanf(int16_t *field_validity, const char *src, const ch
                 if (!*buf) {
                     *f = 0;
                 } else {
-                    *f = static_cast<float>my_atof(buf);
+                    *f = static_cast<float>(my_atof(buf));
                     *field_validity = SET_BIT(*field_validity, conv);
                 }
                 break;

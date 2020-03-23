@@ -27,6 +27,7 @@ It's quite simple to add your own NMEA sentence:
 
 ## References
 
+- [NMEA Reference Manual](https://www.sparkfun.com/datasheets/GPS/NMEA%20Reference%20Manual-Rev2.1-Dec07.pdf)
 - [NMEA Sentences Reference](https://www.gpsinformation.org/dale/nmea.htm)
 
 # Todo

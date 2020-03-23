@@ -332,6 +332,36 @@ struct GPGLL {
     char data_active;
 };
 
+/*
+    $GPVTG
+    VTG - Velocity made good.
+    $GPVTG,054.7,T,034.4,M,005.5,N,010.2,K*48
+    VTG          Track made good and ground speed
+    054.7,T      True track made good (degrees)
+    034.4,M      Magnetic track made good
+    005.5,N      Ground speed, knots
+    010.2,K      Ground speed, Kilometers per hour
+    *48          Checksum
+
+    An extra field might exit right before checksum:
+    Mode: A=Autonomous, D=DGPS, E=DR
+*/
+struct GPVTG {
+    bool isValid;
+    int16_t fieldValidity;
+
+    float measured_heading_1;
+    char north_type_1;
+    float measured_heading_2;
+    char north_type_2;
+    float ground_speed_1;
+    char ground_speed_unit_1;
+    float ground_speed_2;
+    char ground_speed_unit_2;
+
+    char mode;
+};
+
 
 #define GET_BIT(x, pos) (((x)&(1<<(pos)))!=0)
 #define SET_BIT(x, pos) ((x)|(1<<(pos)))
@@ -359,7 +389,8 @@ public:
         TYPE_GPGSV,
         TYPE_HCHDG,
         TYPE_GPRMC,
-        TYPE_GPGLL
+        TYPE_GPGLL,
+        TYPE_GPVTG
     };
     STRINGS_TYPES getLastProcessedType() {return last_processed;}
 
@@ -374,6 +405,7 @@ public:
     bool parse_hchdg(const char *str);
     bool parse_gprmc(const char *str);
     bool parse_gpgll(const char *str);
+    bool parse_gpvtg(const char *str);
 
     PLSR2451 last_plsr2451 = {};
     PLSR2452 last_plsr2452 = {};
@@ -384,6 +416,7 @@ public:
     HCHDG    last_hchdg = {};
     GPRMC    last_gprmc = {};
     GPGLL    last_gpgll = {};
+    GPVTG    last_gpvtg = {}; 
 
 private:
     STRINGS_TYPES last_processed = UNKNOWN;
