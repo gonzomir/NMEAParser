@@ -6,6 +6,7 @@
 
 stages:
   - test
+  - publish
 
 image:
   name: db99/sonar-scanner-cli:latest
@@ -41,3 +42,12 @@ flawfinder:
     paths:
       - flawfinder.html
   allow_failure: true
+
+publish_platformio:
+  stage: publish
+  image: python:latest
+  script:
+    - pip install -U platformio
+    - pio lib register https://gitlab.com/X99/NMEAParser/-/raw/master/library.json
+  only:
+    - master
