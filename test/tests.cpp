@@ -154,7 +154,7 @@ const char * const strings[]  = {
     "$PLSR,245,2,-3617,1654,977,-1750,-3695,-218,793,-609,3971*1E",
 };
 
-#define NUMBER_OF_TURNS 10000
+#define NUMBER_OF_TURNS 1000
 
 void test_unknown_type(void) {
     const String testSentence = "$PLSA";
@@ -245,6 +245,33 @@ void test_gptxt(void) {
     TEST_ASSERT_EQUAL_STRING(const_cast<const char*>(parser.last_gptxt.message), "ROM CORE 1.00 (59842) Jun 27 2012 17:43:52");
 }
 
+void test_gpgsv(void) {
+    const String testSentence = "$GPGSV,3,1,10,05,07,035,38,16,41,305,22,18,57,074,42,20,13,143,27*7C";
+    NMEAParser parser;
+    TEST_ASSERT_TRUE(parser.dispatch(testSentence));
+    TEST_ASSERT_TRUE(parser.last_gpgsv.isValid);
+
+    TEST_ASSERT_EQUAL_INT16(3, parser.last_gpgsv.number_of_messages);
+    TEST_ASSERT_EQUAL_INT16(1, parser.last_gpgsv.message_idx);
+    TEST_ASSERT_EQUAL_INT16(10, parser.last_gpgsv.sats_in_view);
+    TEST_ASSERT_EQUAL_INT16(5, parser.last_gpgsv.sat1_id);
+    TEST_ASSERT_EQUAL_INT16(7, parser.last_gpgsv.sat1_elevation);
+    TEST_ASSERT_EQUAL_INT16(35, parser.last_gpgsv.sat1_azimuth);
+    TEST_ASSERT_EQUAL_INT16(38, parser.last_gpgsv.sat1_snr);
+    TEST_ASSERT_EQUAL_INT16(16, parser.last_gpgsv.sat2_id);
+    TEST_ASSERT_EQUAL_INT16(41, parser.last_gpgsv.sat2_elevation);
+    TEST_ASSERT_EQUAL_INT16(305, parser.last_gpgsv.sat2_azimuth);
+    TEST_ASSERT_EQUAL_INT16(22, parser.last_gpgsv.sat2_snr);
+    TEST_ASSERT_EQUAL_INT16(18, parser.last_gpgsv.sat3_id);
+    TEST_ASSERT_EQUAL_INT16(57, parser.last_gpgsv.sat3_elevation);
+    TEST_ASSERT_EQUAL_INT16(74, parser.last_gpgsv.sat3_azimuth);
+    TEST_ASSERT_EQUAL_INT16(42, parser.last_gpgsv.sat3_snr);
+    TEST_ASSERT_EQUAL_INT16(20, parser.last_gpgsv.sat4_id);
+    TEST_ASSERT_EQUAL_INT16(13, parser.last_gpgsv.sat4_elevation);
+    TEST_ASSERT_EQUAL_INT16(143, parser.last_gpgsv.sat4_azimuth);
+    TEST_ASSERT_EQUAL_INT16(27, parser.last_gpgsv.sat4_snr);
+}
+
 void performance(void) {
     char buffer[200];
 
@@ -268,6 +295,8 @@ void performance(void) {
 
     sprintf(buffer, "Done in %d ms, failed %d times", after - before, nfailed);
     TEST_MESSAGE(buffer);
+
+    //nothing failed, so PIO unit tests framework assumes that test succeeded.
 }
 
 
@@ -280,6 +309,7 @@ void process() {
     RUN_TEST(test_gpgll);
     RUN_TEST(test_gpvtg);
     RUN_TEST(test_gptxt);
+    RUN_TEST(test_gpgsv);
     RUN_TEST(performance);
     UNITY_END();
 }
