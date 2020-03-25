@@ -27,7 +27,7 @@ cpplint:
   image: python:latest
   script: 
     - python -m pip install cpplint
-    - cpplint --filter=-whitespace,-legal/copyright,-readability/multiline_comment --linelength=180 --recursive src/* include/* &> cpplint.txt
+    - cpplint --filter=-whitespace,-legal/copyright,-readability/multiline_comment --linelength=180 --recursive src/* &> cpplint.txt
   artifacts:
     paths:
       - cpplint.txt

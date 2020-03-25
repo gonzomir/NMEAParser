@@ -9,8 +9,9 @@ bool NMEAParser::dispatch(const String str) {
 }
 
 bool NMEAParser::dispatch(const char *str) {
-    if (!str[0])
+    if (!str[0]) {
         return false;
+    }  
 
     //check NMEA string type
     if (str[0] == '$') {
@@ -19,21 +20,24 @@ bool NMEAParser::dispatch(const char *str) {
             if (str[10] == '1') return parse_plsr2451(str);
             if (str[10] == '2') return parse_plsr2452(str);
             if (str[10] == '7') return parse_plsr2457(str);
+        } else if (str[1] == 'G' && str[2] == 'P') {
+            //GPGGA
+            if      (str[3] == 'G' && str[4] == 'G' && str[5] == 'A') return parse_gpgga(str);
+            //GPGSA
+            else if (str[3] == 'G' && str[4] == 'S' && str[5] == 'A') return parse_gpgsa(str);
+            //GPGSV
+            else if (str[3] == 'G' && str[4] == 'S' && str[5] == 'V') return parse_gpgsv(str);
+            //GPRMC
+            else if (str[3] == 'R' && str[4] == 'M' && str[5] == 'C') return parse_gprmc(str);
+            //GPVTG
+            else if (str[3] == 'V' && str[4] == 'T' && str[5] == 'G') return parse_gpvtg(str);
+            //GPTXT
+            else if (str[3] == 'T' && str[4] == 'X' && str[5] == 'T') return parse_gptxt(str);
+            //GPGLL
+            else if (str[3] == 'G' && str[4] == 'L' && str[5] == 'L') return parse_gpgll(str);
         }
-        //GPGGA
-        else if (str[1] == 'G' && str[2] == 'P' && str[3] == 'G' && str[4] == 'G' && str[5] == 'A') return parse_gpgga(str);
-        //GPGSA
-        else if (str[1] == 'G' && str[2] == 'P' && str[3] == 'G' && str[4] == 'S' && str[5] == 'A') return parse_gpgsa(str);
-        //GPGSV
-        else if (str[1] == 'G' && str[2] == 'P' && str[3] == 'G' && str[4] == 'S' && str[5] == 'V') return parse_gpgsv(str);
-        //GPRMC
-        else if (str[1] == 'G' && str[2] == 'P' && str[3] == 'R' && str[4] == 'M' && str[5] == 'C') return parse_gprmc(str);
-        //GPGLL
-        else if (str[1] == 'G' && str[2] == 'P' && str[3] == 'G' && str[4] == 'L' && str[5] == 'L') return parse_gpgll(str);
         //HCHDG
         else if (str[1] == 'H' && str[2] == 'C' && str[3] == 'H' && str[4] == 'D' && str[5] == 'G') return parse_hchdg(str);
-        //GPVTG
-        else if (str[1] == 'G' && str[2] == 'P' && str[3] == 'V' && str[4] == 'T' && str[5] == 'G') return parse_gpvtg(str);
     }
     return false;
 }
@@ -241,6 +245,19 @@ bool NMEAParser::parse_gpvtg(const char *str) {
     return last_gpvtg.isValid;
 } 
 
+bool NMEAParser::parse_gptxt(const char *str) {
+    checksum = 0;
+    scanned = my_sscanf(&last_gptxt.fieldValidity, str, "$GPTXT,%d,%d,%d,%s*%X",
+            &last_gptxt.number_of_messages,
+            &last_gptxt.sentence_number,
+            &last_gptxt.text_identifier,
+            last_gptxt.message,
+            &checksum);
+
+    last_gptxt.isValid = ((scanned == 5) && check_checksum(str));
+    last_processed = NMEAParser::TYPE_GPTXT;
+    return last_gptxt.isValid;
+} 
 
 
 
@@ -375,7 +392,7 @@ int16_t NMEAParser::my_sscanf(int16_t *field_validity, const char *src, const ch
         }
 
         //compute the length of the next field. Stop at ' ', '\0', '*', or ','.
-        for (index = 0; *sp != '\0' && *sp != ' ' && *sp != ',' && *sp != '*'; index++)
+        for (index = 0; *sp != '\0' && /**sp != ' ' &&*/ *sp != ',' && *sp != '*'; index++)
             buf[index] = *sp++;
 
         //cut the string

@@ -2,6 +2,26 @@
 	<img src="logo.svg" width="30%">
 </p>
 
+<div align="center">
+    <img src='https://sonar.x99.fr/api/project_badges/measure?project=NMEAParser&metric=bugs'/>
+    <img src='https://sonar.x99.fr/api/project_badges/measure?project=NMEAParser&metric=code_smells'/>
+    <img src='https://sonar.x99.fr/api/project_badges/measure?project=NMEAParser&metric=coverage'/>
+    <img src='https://sonar.x99.fr/api/project_badges/measure?project=NMEAParser&metric=duplicated_lines_density'/>
+</div>
+
+<div align="center">
+    <img src='https://sonar.x99.fr/api/project_badges/measure?project=NMEAParser&metric=ncloc'/>
+    <img src='https://sonar.x99.fr/api/project_badges/measure?project=NMEAParser&metric=sqale_rating'/>
+    <img src='https://sonar.x99.fr/api/project_badges/measure?project=NMEAParser&metric=alert_status'/>
+    <img src='https://sonar.x99.fr/api/project_badges/measure?project=NMEAParser&metric=reliability_rating'/>
+</div>
+
+<div align="center">
+    <img src='https://sonar.x99.fr/api/project_badges/measure?project=NMEAParser&metric=security_rating'/>
+    <img src='https://sonar.x99.fr/api/project_badges/measure?project=NMEAParser&metric=sqale_index'/>
+    <img src='https://sonar.x99.fr/api/project_badges/measure?project=NMEAParser&metric=vulnerabilities'/>
+</div>
+
 NMEAParser is a library that aims at drastically simplifiying the parsing of [NMEA](https://www.wikiwand.com/en/NMEA_0183) sentences. These can be from a GPS, a gyrocompass or any device that complies with the NMEA 0183 standard.
 
 # But...why?
@@ -15,7 +35,31 @@ Beyond these considerations, NMEAParser is damn fast and has a very low memory f
 
 # Installing the library
 # Technical details
-## How it works
+## Performance
+To assess performance, see unit tests. A part of these is dedicated to performance. Basically, `NMEAParser` was used to dispatch and parse great amounts of sentences. Results are very linear, according to the results.
+
+The results are the following:
+
+### Arduino Mega 2560, 16MHz
+
+Number of sentences | Time in seconds
+-|-
+150 | 0.059
+1 500 | 0.591
+15 000 | 5.915
+150k | 59.155
+
+### ESP32, 240MHz, 1 core
+
+Number of sentences | Time in seconds
+-|-
+150 | 0.002
+1 500 | 0.025
+15 000 | 0.254
+150k | 2.530
+1.5M | 25.288
+
+
 ## Adding your own sentences
 
 It's quite simple to add your own NMEA sentence:
@@ -29,6 +73,7 @@ It's quite simple to add your own NMEA sentence:
 
 - [NMEA Reference Manual](https://www.sparkfun.com/datasheets/GPS/NMEA%20Reference%20Manual-Rev2.1-Dec07.pdf)
 - [NMEA Sentences Reference](https://www.gpsinformation.org/dale/nmea.htm)
+- [NMEA 0183 Amendment (adds $GPTXT)](https://www.nmea.org/Assets/20160520%20txt%20amendment.pdf)
 
 # Todo
 - [ ] Add examples
