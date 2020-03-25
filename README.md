@@ -15,7 +15,31 @@ Beyond these considerations, NMEAParser is damn fast and has a very low memory f
 
 # Installing the library
 # Technical details
-## How it works
+## Performance
+To assess performance, see unit tests. A part of these is dedicated to performance. Basically, `NMEAParser` was used to dispatch and parse great amounts of sentences. Results are very linear, according to the results.
+
+The results are the following:
+
+### Arduino Mega 2560, 16MHz
+
+Number of sentences | Time in seconds
+-|-
+150 | 0.059
+1 500 | 0.591
+15 000 | 5.915
+150k | 59.155
+
+### ESP32, 240MHz, 1 core
+
+Number of sentences | Time in seconds
+-|-
+150 | 0.002
+1 500 | 0.025
+15 000 | 0.254
+150k | 2.530
+1.5M | 25.288
+
+
 ## Adding your own sentences
 
 It's quite simple to add your own NMEA sentence:
