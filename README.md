@@ -2,6 +2,26 @@
 	<img src="logo.svg" width="30%">
 </p>
 
+<div align="center">
+    <img src='https://sonar.x99.fr/api/project_badges/measure?project=NMEAParser&metric=bugs'/>
+    <img src='https://sonar.x99.fr/api/project_badges/measure?project=NMEAParser&metric=code_smells'/>
+    <img src='https://sonar.x99.fr/api/project_badges/measure?project=NMEAParser&metric=coverage'/>
+    <img src='https://sonar.x99.fr/api/project_badges/measure?project=NMEAParser&metric=duplicated_lines_density'/>
+</div>
+
+<div align="center">
+    <img src='https://sonar.x99.fr/api/project_badges/measure?project=NMEAParser&metric=ncloc'/>
+    <img src='https://sonar.x99.fr/api/project_badges/measure?project=NMEAParser&metric=sqale_rating'/>
+    <img src='https://sonar.x99.fr/api/project_badges/measure?project=NMEAParser&metric=alert_status'/>
+    <img src='https://sonar.x99.fr/api/project_badges/measure?project=NMEAParser&metric=reliability_rating'/>
+</div>
+
+<div align="center">
+    <img src='https://sonar.x99.fr/api/project_badges/measure?project=NMEAParser&metric=security_rating'/>
+    <img src='https://sonar.x99.fr/api/project_badges/measure?project=NMEAParser&metric=sqale_index'/>
+    <img src='https://sonar.x99.fr/api/project_badges/measure?project=NMEAParser&metric=vulnerabilities'/>
+</div>
+
 NMEAParser is a library that aims at drastically simplifiying the parsing of [NMEA](https://www.wikiwand.com/en/NMEA_0183) sentences. These can be from a GPS, a gyrocompass or any device that complies with the NMEA 0183 standard.
 
 # But...why?

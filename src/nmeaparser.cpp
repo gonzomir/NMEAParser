@@ -20,8 +20,7 @@ bool NMEAParser::dispatch(const char *str) {
             if (str[10] == '1') return parse_plsr2451(str);
             if (str[10] == '2') return parse_plsr2452(str);
             if (str[10] == '7') return parse_plsr2457(str);
-        }
-        else if (str[1] == 'G' && str[2] == 'P') {
+        } else if (str[1] == 'G' && str[2] == 'P') {
             //GPGGA
             if      (str[3] == 'G' && str[4] == 'G' && str[5] == 'A') return parse_gpgga(str);
             //GPGSA
