@@ -3,6 +3,8 @@
 
 # References:
 # - https://github.com/SonarOpenCommunity/sonar-cxx/blob/master/sonar-cxx-plugin/src/samples/SampleProject2/Makefile
+#- g++ test/tests.cpp -I ~/.platformio/packages/tool-unity -I src -std=c++11 -o run -DUNIT_TEST -fpermissive --coverage -g -O0 ~/.platformio/packages/tool-unity/unity.c src/nmeaparser.cpp
+#- gcovr --sonarqube sonargcovr.xml
 
 stages:
   - test
@@ -18,8 +20,6 @@ variables:
 sonarqube-check:
   stage: test
   script:
-    #- g++ test/tests.cpp -I ~/.platformio/packages/tool-unity -I src -std=c++11 -o run -DUNIT_TEST -fpermissive --coverage -g -O0 ~/.platformio/packages/tool-unity/unity.c src/nmeaparser.cpp
-    #- gcovr --sonarqube sonargcovr.xml
     - cppcheck --xml --xml-version=2 src 2> cppcheck.xml
     - sonar-scanner -X -Dsonar.projectKey=NMEAParser -Dsonar.sources=. -Dsonar.host.url=https://sonar.x99.fr -Dsonar.login=9bd60cacef35de1b8954855906efc9d5ed736cfa -Dsonar.sourceEncoding=UTF-8 -Dsonar.cxx.cppcheck.reportPath=cppcheck.xml
 allow_failure: true
