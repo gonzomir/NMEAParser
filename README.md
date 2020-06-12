@@ -1,6 +1,6 @@
-<p align="center">
-	<img src="logo.svg" width="30%">
-</p>
+<div align="center">
+	<img src="logo.png" width="30%" alt="project's logo" style='fill: #94d31b'>
+</div>
 
 <div align="center">
     <img src='https://sonar.x99.fr/api/project_badges/measure?project=NMEAParser&metric=bugs'/>
