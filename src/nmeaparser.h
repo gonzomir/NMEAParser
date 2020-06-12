@@ -371,32 +371,54 @@ public:
 	bool parseGPVTG(const char *str);		/**< Parses a GPVTG sentence*/
 	bool parseGPTXT(const char *str);		/**< Parses a GPTXT sentence*/
 
-	PLSR2451 lastPLSR2451 = {};
-	PLSR2452 lastPLSR2452 = {};
-	PLSR2457 lastPLSR2457 = {};
-	GPGGA	lastGPGGA = {};
-	GPGSA	lastGPGSA = {};
-	GPGSV	lastGPGSV = {};
-	HCHDG	lastHCHDG = {};
-	GPRMC	lastGPRMC = {};
-	GPGLL	lastGPGLL = {};
-	GPVTG	lastGPVTG = {};
-	GPTXT	lastGPTXT = {};
+	PLSR2451 lastPLSR2451 = {};				/**< Last PLSR2451 sentence*/
+	PLSR2452 lastPLSR2452 = {};				/**< Last PLSR2452 sentence*/
+	PLSR2457 lastPLSR2457 = {};				/**< Last PLSR2457 sentence*/
+	GPGGA	lastGPGGA = {};					/**< Last GPGGA sentence*/
+	GPGSA	lastGPGSA = {};					/**< Last GPGSA sentence*/
+	GPGSV	lastGPGSV = {};					/**< Last GPGSV sentence*/
+	HCHDG	lastHCHDG = {};					/**< Last HCHDG sentence*/
+	GPRMC	lastGPRMC = {};					/**< Last GPRMC sentence*/
+	GPGLL	lastGPGLL = {};					/**< Last GPGLL sentence*/
+	GPVTG	lastGPVTG = {};					/**< Last GPVTG sentence*/
+	GPTXT	lastGPTXT = {};					/**< Last GPTXT sentence*/
 
 private:
-	STRINGS_TYPES lastParsed = UNKNOWN;
+	STRINGS_TYPES lastParsed = UNKNOWN;		/**< Type of the last sentence that's been parsed.*/
 
-	int16_t checksum = 0;
-	int16_t scanned = 0;
+	int16_t checksum = 0;					/**< Working variable for checksum computing*/
+	int16_t scanned = 0;					/**< Working variable for number of parsed fields.*/
 
-	//string parsing subfunctions
+	/**
+	 * @brief Converts a single char to its corresponding digit. Can handle '0' to 'F', lowercase or not.
+	 */
 	int16_t my_atoh(char a);
+	/**
+	 * @brief Very fast version of strncpy, just for fun.
+	 */
 	char *my_strncpy(char *dst, const char *src, int16_t n);
+	/**
+	 * @brief Very fast version of strlen, just for fun.
+	 */
 	int16_t my_strlen(const char* str);
+	/**
+	 * @brief Converts a string to an integer.
+	 */
 	int32_t my_atoi(const char *str);
+	/**
+	 * @brief Converts a string to an float.
+	 */
 	float my_atof(const char *s);
-
-	//main parser
+	/**
+	 * @brief NMEAParser's own implementation of sscanf. It's a shrunk-to-the-minimum, whitespace compatible version
+	 * of common sscanf.
+	 *
+	 * @param field_validity The fieldValidity field to set bits of. Each bit set to 1 is a vlaid field.
+	 * @param src The sentence to parse
+	 * @param format The format string, as any sscanf.
+	 * @param ... The variables to write to.
+	 * @return int16_t The number of fields successfully parsed.
+	 */
 	int16_t my_sscanf(int16_t *field_validity, const char *src, const char *format, ... );
 
 	//calculus tools
