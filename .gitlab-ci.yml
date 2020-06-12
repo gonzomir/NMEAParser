@@ -22,7 +22,7 @@ sonarqube-check:
   script:
     - cppcheck --xml --xml-version=2 src 2> cppcheck.xml
     - sonar-scanner -X -Dsonar.projectKey=NMEAParser -Dsonar.sources=. -Dsonar.host.url=https://sonar.x99.fr -Dsonar.login=9bd60cacef35de1b8954855906efc9d5ed736cfa -Dsonar.sourceEncoding=UTF-8 -Dsonar.cxx.cppcheck.reportPath=cppcheck.xml
-allow_failure: true
+  allow_failure: true
 
 cpplint:
   stage: test
