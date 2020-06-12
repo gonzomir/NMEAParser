@@ -33,7 +33,6 @@ parses very wells NMEA strings, but has two main drawbacks:
 
 Beyond these considerations, NMEAParser is damn fast and has a very low memory footprint. This is what you need when working with Arduinos, ESPs and such.
 
-# Installing the library
 # Technical details
 ## Performance
 To assess performance, see unit tests. A part of these is dedicated to performance. Basically, `NMEAParser` was used to dispatch and parse great amounts of sentences. Results are very linear, according to the results.
@@ -59,6 +58,10 @@ Number of sentences | Time in seconds
 150k | 2.530
 1.5M | 25.288
 
+### Your own computer
+
+NMEAParser now features native tests, meaning that you can benchmark the library using your own computer, not just a microcontroller. On my i7-6700K, 1.5 millions NMEA strings were parsed in approx. 225ms.
+
 
 ## Adding your own sentences
 
@@ -79,6 +82,7 @@ It's quite simple to add your own NMEA sentence:
 - [ ] Add examples
 - [ ] Complete unit tests
 - [ ] Add way to compose sentences
+- [ ] Add calculation tools (distances..)
 
 # Copyright
 ## Logo

@@ -4,6 +4,7 @@
     #include <Arduino.h>
 #else
     #include <stdint.h>
+	#include <string>
 #endif
 #include <stdarg.h>
 
@@ -394,7 +395,11 @@ public:
     char generate_checksum(const char *str);
 
     //central dispatcher
-    bool dispatch(const String str);
+#ifdef ARDUINO
+	bool dispatch(const String str);
+#else
+	bool dispatch(const std::string str);
+#endif
     bool dispatch(const char *str);
 
     //types
@@ -437,7 +442,7 @@ public:
     HCHDG    last_hchdg = {};
     GPRMC    last_gprmc = {};
     GPGLL    last_gpgll = {};
-    GPVTG    last_gpvtg = {}; 
+    GPVTG    last_gpvtg = {};
     GPTXT    last_gptxt = {};
 
 private:

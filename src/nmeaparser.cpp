@@ -4,14 +4,20 @@ NMEAParser::NMEAParser() {
     last_plsr2451.isValid = false;
 }
 
+#ifdef ARDUINO
 bool NMEAParser::dispatch(const String str) {
     return dispatch(str.c_str());
 }
+#else
+bool NMEAParser::dispatch(const std::string str) {
+    return dispatch(str.c_str());
+}
+#endif
 
 bool NMEAParser::dispatch(const char *str) {
     if (!str[0]) {
         return false;
-    }  
+    }
 
     //check NMEA string type
     if (str[0] == '$') {
@@ -243,7 +249,7 @@ bool NMEAParser::parse_gpvtg(const char *str) {
     last_gpvtg.isValid = ((scanned == 10) && check_checksum(str));
     last_processed = NMEAParser::TYPE_GPVTG;
     return last_gpvtg.isValid;
-} 
+}
 
 bool NMEAParser::parse_gptxt(const char *str) {
     checksum = 0;
@@ -257,7 +263,7 @@ bool NMEAParser::parse_gptxt(const char *str) {
     last_gptxt.isValid = ((scanned == 5) && check_checksum(str));
     last_processed = NMEAParser::TYPE_GPTXT;
     return last_gptxt.isValid;
-} 
+}
 
 
 
@@ -445,7 +451,7 @@ int16_t NMEAParser::my_sscanf(int16_t *field_validity, const char *src, const ch
                 break;
             //compute an hexadecimal
             case 'X':
-            case 'x': 
+            case 'x':
                 i = va_arg(ap, int16_t *);
                 if (!*buf) {
                     *i = 0;

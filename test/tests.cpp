@@ -1,6 +1,10 @@
 #include <nmeaparser.h>
 #include <unity.h>
 
+#ifndef ARDUINO
+#include <chrono>
+#endif
+
 const char * const strings[]  = {
     "$GPTXT,01,01,02,u-blox ag - www.u-blox.com*50",
     "$GPTXT,01,01,02,HW  UBX-G70xx   00070000 *77",
@@ -154,17 +158,25 @@ const char * const strings[]  = {
     "$PLSR,245,2,-3617,1654,977,-1750,-3695,-218,793,-609,3971*1E",
 };
 
-#define NUMBER_OF_TURNS 1000
+#define NUMBER_OF_TURNS 10000
 
 void test_unknown_type(void) {
+#ifdef ARDUINO
     const String testSentence = "$PLSA";
+#else
+    const std::string testSentence = "$PLSA";
+#endif
     NMEAParser parser;
     parser.dispatch(testSentence);
     TEST_ASSERT_FALSE(parser.dispatch(testSentence));
 }
 
 void test_plsr2451(void) {
+#ifdef ARDUINO
     const String testSentence = "$PLSR,245,1,213,0,1052,-2,14,229,20,0,2*16";
+#else
+    const std::string testSentence = "$PLSR,245,1,213,0,1052,-2,14,229,20,0,2*16";
+#endif
     NMEAParser parser;
     TEST_ASSERT_TRUE(parser.dispatch(testSentence));
     TEST_ASSERT_TRUE(parser.last_plsr2451.isValid);
@@ -180,7 +192,11 @@ void test_plsr2451(void) {
 }
 
 void test_plsr2452(void) {
+#ifdef ARDUINO
     const String testSentence = "$PLSR,245,2,-3129,2622,328,-2614,-2996,-984,-388,-961,3963*36";
+#else
+    const std::string testSentence = "$PLSR,245,2,-3129,2622,328,-2614,-2996,-984,-388,-961,3963*36";
+#endif
     NMEAParser parser;
     TEST_ASSERT_TRUE(parser.dispatch(testSentence));
     TEST_ASSERT_TRUE(parser.last_plsr2452.isValid);
@@ -196,7 +212,11 @@ void test_plsr2452(void) {
 }
 
 void test_plsr2457(void) {
+#ifdef ARDUINO
     const String testSentence = "$PLSR,245,7,-9,1,0*20";
+#else
+    const std::string testSentence = "$PLSR,245,7,-9,1,0*20";
+#endif
     NMEAParser parser;
     TEST_ASSERT_TRUE(parser.dispatch(testSentence));
     TEST_ASSERT_TRUE(parser.last_plsr2457.isValid);
@@ -206,7 +226,11 @@ void test_plsr2457(void) {
 }
 
 void test_gpgll(void) {
+#ifdef ARDUINO
     const String testSentence = "$GPGLL,4448.55381,N,00038.83314,W,134006.00,A,A*7B";
+#else
+    const std::string testSentence = "$GPGLL,4448.55381,N,00038.83314,W,134006.00,A,A*7B";
+#endif
     NMEAParser parser;
     TEST_ASSERT_TRUE(parser.dispatch(testSentence));
     TEST_ASSERT_TRUE(parser.last_gpgll.isValid);
@@ -219,7 +243,11 @@ void test_gpgll(void) {
 }
 
 void test_gpvtg(void) {
+#ifdef ARDUINO
     const String testSentence = "$GPVTG,,T,,M,0.097,N,0.179,K,A*22";
+#else
+    const std::string testSentence = "$GPVTG,,T,,M,0.097,N,0.179,K,A*22";
+#endif
     NMEAParser parser;
     TEST_ASSERT_TRUE(parser.dispatch(testSentence));
     TEST_ASSERT_TRUE(parser.last_gpvtg.isValid);
@@ -235,7 +263,11 @@ void test_gpvtg(void) {
 }
 
 void test_gptxt(void) {
+#ifdef ARDUINO
     const String testSentence = "$GPTXT,01,01,02,ROM CORE 1.00 (59842) Jun 27 2012 17:43:52*59";
+#else
+    const std::string testSentence = "$GPTXT,01,01,02,ROM CORE 1.00 (59842) Jun 27 2012 17:43:52*59";
+#endif
     NMEAParser parser;
     TEST_ASSERT_TRUE(parser.dispatch(testSentence));
     TEST_ASSERT_TRUE(parser.last_gptxt.isValid);
@@ -246,7 +278,11 @@ void test_gptxt(void) {
 }
 
 void test_gpgsv(void) {
+#ifdef ARDUINO
     const String testSentence = "$GPGSV,3,1,10,05,07,035,38,16,41,305,22,18,57,074,42,20,13,143,27*7C";
+#else
+    const std::string testSentence = "$GPGSV,3,1,10,05,07,035,38,16,41,305,22,18,57,074,42,20,13,143,27*7C";
+#endif
     NMEAParser parser;
     TEST_ASSERT_TRUE(parser.dispatch(testSentence));
     TEST_ASSERT_TRUE(parser.last_gpgsv.isValid);
@@ -281,19 +317,28 @@ void performance(void) {
 
     sprintf(buffer, "Parsing %d NMEA sentences", n * NUMBER_OF_TURNS);
     TEST_MESSAGE(buffer);
-
+#ifdef ARDUINO
     uint32_t before = millis();
+#else
+	std::chrono::high_resolution_clock::time_point before = std::chrono::high_resolution_clock::now();
+#endif
 
-    for (uint16_t turn=0; turn<NUMBER_OF_TURNS; turn++) { 
+    for (uint16_t turn=0; turn<NUMBER_OF_TURNS; turn++) {
         for (uint16_t i=0; i<n; i++) {
-            if (!parser.dispatch(strings[i])) 
+            if (!parser.dispatch(strings[i]))
                 nfailed++;
         }
     }
 
+#ifdef ARDUINO
     uint32_t after = millis();
-
     sprintf(buffer, "Done in %d ms, failed %d times", after - before, nfailed);
+#else
+	std::chrono::high_resolution_clock::time_point after = std::chrono::high_resolution_clock::now();
+	std::chrono::duration<double, std::milli> time_span = after - before;
+    sprintf(buffer, "Done in %f ms, failed %d times", time_span.count(), nfailed);
+#endif
+
     TEST_MESSAGE(buffer);
 
     //nothing failed, so PIO unit tests framework assumes that test succeeded.
