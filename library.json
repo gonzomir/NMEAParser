@@ -13,6 +13,5 @@
     },
     "frameworks": "*",
     "platforms": "*",
-    "description": "NMEA sentences parser for Arduino, ESP and almost anything else.",
-    "downloadUrl": "https://gitlab.com/X99/NMEAParser/-/archive/master/NMEAParser-master.zip"
+    "description": "NMEA sentences parser for Arduino, ESP and almost anything else."
 }
