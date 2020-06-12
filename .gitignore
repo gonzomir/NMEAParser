@@ -6,3 +6,7 @@
 .DS_Store
 .scannerwork
 documentation/doxygen/html
+run.dSYM
+*.gcno
+*.gcda
+run

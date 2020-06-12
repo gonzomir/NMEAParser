@@ -18,14 +18,16 @@ variables:
 sonarqube-check:
   stage: test
   script:
-    - cppcheck --xml --xml-version=2 src lib include 2> cppcheck.xml 
-    - sonar-scanner -X -Dsonar.projectKey=NMEAParser -Dsonar.sources=. -Dsonar.host.url=https://sonar.x99.fr -Dsonar.login=9936795bd0d6bf58585d1a402236b548c9ede860 -Dsonar.sourceEncoding=UTF-8 -Dsonar.cxx.cppcheck.reportPath=cppcheck.xml
-  allow_failure: true
+    #- g++ test/tests.cpp -I ~/.platformio/packages/tool-unity -I src -std=c++11 -o run -DUNIT_TEST -fpermissive --coverage -g -O0 ~/.platformio/packages/tool-unity/unity.c src/nmeaparser.cpp
+    #- gcovr --sonarqube sonargcovr.xml
+    - cppcheck --xml --xml-version=2 src 2> cppcheck.xml
+    - sonar-scanner -X -Dsonar.projectKey=NMEAParser -Dsonar.sources=. -Dsonar.host.url=https://sonar.x99.fr -Dsonar.login=9bd60cacef35de1b8954855906efc9d5ed736cfa -Dsonar.sourceEncoding=UTF-8 -Dsonar.cxx.cppcheck.reportPath=cppcheck.xml
+allow_failure: true
 
 cpplint:
   stage: test
   image: python:latest
-  script: 
+  script:
     - python -m pip install cpplint
     - cpplint --filter=-whitespace,-legal/copyright,-readability/multiline_comment --linelength=180 --recursive src/* &> cpplint.txt
   artifacts:
@@ -35,7 +37,7 @@ cpplint:
 flawfinder:
   stage: test
   image: python:latest
-  script: 
+  script:
     - python -m pip install flawfinder
     - flawfinder --html -DQS include lib src test > flawfinder.html
   artifacts:
