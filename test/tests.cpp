@@ -179,16 +179,16 @@ void test_plsr2451(void) {
 #endif
     NMEAParser parser;
     TEST_ASSERT_TRUE(parser.dispatch(testSentence));
-    TEST_ASSERT_TRUE(parser.last_plsr2451.isValid);
-    TEST_ASSERT_EQUAL_INT16(213, parser.last_plsr2451.direction);
-    TEST_ASSERT_EQUAL_INT16(0, parser.last_plsr2451.calibration_status);
-    TEST_ASSERT_EQUAL_INT16(1052, parser.last_plsr2451.field_intensity);
-    TEST_ASSERT_EQUAL_INT16(-2, parser.last_plsr2451.acceleration_x);
-    TEST_ASSERT_EQUAL_INT16(14, parser.last_plsr2451.acceleration_y);
-    TEST_ASSERT_EQUAL_INT16(229, parser.last_plsr2451.acceleration_z);
-    TEST_ASSERT_EQUAL_INT16(20, parser.last_plsr2451.temperature);
-    TEST_ASSERT_EQUAL_INT16(0, parser.last_plsr2451.mounting_mode);
-    TEST_ASSERT_EQUAL_INT16(2, parser.last_plsr2451.current_calibration);
+    TEST_ASSERT_TRUE(parser.lastPLSR2451.isValid);
+    TEST_ASSERT_EQUAL_INT16(213, parser.lastPLSR2451.direction);
+    TEST_ASSERT_EQUAL_INT16(0, parser.lastPLSR2451.calibration_status);
+    TEST_ASSERT_EQUAL_INT16(1052, parser.lastPLSR2451.field_intensity);
+    TEST_ASSERT_EQUAL_INT16(-2, parser.lastPLSR2451.acceleration_x);
+    TEST_ASSERT_EQUAL_INT16(14, parser.lastPLSR2451.acceleration_y);
+    TEST_ASSERT_EQUAL_INT16(229, parser.lastPLSR2451.acceleration_z);
+    TEST_ASSERT_EQUAL_INT16(20, parser.lastPLSR2451.temperature);
+    TEST_ASSERT_EQUAL_INT16(0, parser.lastPLSR2451.mounting_mode);
+    TEST_ASSERT_EQUAL_INT16(2, parser.lastPLSR2451.current_calibration);
 }
 
 void test_plsr2452(void) {
@@ -199,16 +199,16 @@ void test_plsr2452(void) {
 #endif
     NMEAParser parser;
     TEST_ASSERT_TRUE(parser.dispatch(testSentence));
-    TEST_ASSERT_TRUE(parser.last_plsr2452.isValid);
-    TEST_ASSERT_EQUAL_INT16(-3129, parser.last_plsr2452.xx);
-    TEST_ASSERT_EQUAL_INT16(2622, parser.last_plsr2452.yx);
-    TEST_ASSERT_EQUAL_INT16(328, parser.last_plsr2452.zx);
-    TEST_ASSERT_EQUAL_INT16(-2614, parser.last_plsr2452.xy);
-    TEST_ASSERT_EQUAL_INT16(-2996, parser.last_plsr2452.yy);
-    TEST_ASSERT_EQUAL_INT16(-984, parser.last_plsr2452.zy);
-    TEST_ASSERT_EQUAL_INT16(-388, parser.last_plsr2452.xz);
-    TEST_ASSERT_EQUAL_INT16(-961, parser.last_plsr2452.yz);
-    TEST_ASSERT_EQUAL_INT16(3963, parser.last_plsr2452.zz);
+    TEST_ASSERT_TRUE(parser.lastPLSR2452.isValid);
+    TEST_ASSERT_EQUAL_INT16(-3129, parser.lastPLSR2452.xx);
+    TEST_ASSERT_EQUAL_INT16(2622, parser.lastPLSR2452.yx);
+    TEST_ASSERT_EQUAL_INT16(328, parser.lastPLSR2452.zx);
+    TEST_ASSERT_EQUAL_INT16(-2614, parser.lastPLSR2452.xy);
+    TEST_ASSERT_EQUAL_INT16(-2996, parser.lastPLSR2452.yy);
+    TEST_ASSERT_EQUAL_INT16(-984, parser.lastPLSR2452.zy);
+    TEST_ASSERT_EQUAL_INT16(-388, parser.lastPLSR2452.xz);
+    TEST_ASSERT_EQUAL_INT16(-961, parser.lastPLSR2452.yz);
+    TEST_ASSERT_EQUAL_INT16(3963, parser.lastPLSR2452.zz);
 }
 
 void test_plsr2457(void) {
@@ -219,10 +219,10 @@ void test_plsr2457(void) {
 #endif
     NMEAParser parser;
     TEST_ASSERT_TRUE(parser.dispatch(testSentence));
-    TEST_ASSERT_TRUE(parser.last_plsr2457.isValid);
-    TEST_ASSERT_EQUAL_INT16(-9, parser.last_plsr2457.gps_speed_east);
-    TEST_ASSERT_EQUAL_INT16(1, parser.last_plsr2457.gps_speed_north);
-    TEST_ASSERT_EQUAL_INT16(0, parser.last_plsr2457.gps_speed_up);
+    TEST_ASSERT_TRUE(parser.lastPLSR2457.isValid);
+    TEST_ASSERT_EQUAL_INT16(-9, parser.lastPLSR2457.gps_speed_east);
+    TEST_ASSERT_EQUAL_INT16(1, parser.lastPLSR2457.gps_speed_north);
+    TEST_ASSERT_EQUAL_INT16(0, parser.lastPLSR2457.gps_speed_up);
 }
 
 void test_gpgll(void) {
@@ -233,13 +233,13 @@ void test_gpgll(void) {
 #endif
     NMEAParser parser;
     TEST_ASSERT_TRUE(parser.dispatch(testSentence));
-    TEST_ASSERT_TRUE(parser.last_gpgll.isValid);
-    TEST_ASSERT_EQUAL_STRING("4448.55381", parser.last_gpgll.latitude);
-    TEST_ASSERT(parser.last_gpgll.north_south_indicator == 'N');
-    TEST_ASSERT_EQUAL_STRING("00038.83314", parser.last_gpgll.longitude);
-    TEST_ASSERT(parser.last_gpgll.east_west_indicator == 'W');
-    TEST_ASSERT_EQUAL_STRING("134006.00", parser.last_gpgll.fix_time);
-    TEST_ASSERT(parser.last_gpgll.data_active == 'A');
+    TEST_ASSERT_TRUE(parser.lastGPGLL.isValid);
+    TEST_ASSERT_EQUAL_STRING("4448.55381", parser.lastGPGLL.latitude);
+    TEST_ASSERT(parser.lastGPGLL.north_south_indicator == 'N');
+    TEST_ASSERT_EQUAL_STRING("00038.83314", parser.lastGPGLL.longitude);
+    TEST_ASSERT(parser.lastGPGLL.east_west_indicator == 'W');
+    TEST_ASSERT_EQUAL_STRING("134006.00", parser.lastGPGLL.fix_time);
+    TEST_ASSERT(parser.lastGPGLL.data_active == 'A');
 }
 
 void test_gpvtg(void) {
@@ -250,16 +250,16 @@ void test_gpvtg(void) {
 #endif
     NMEAParser parser;
     TEST_ASSERT_TRUE(parser.dispatch(testSentence));
-    TEST_ASSERT_TRUE(parser.last_gpvtg.isValid);
-    TEST_ASSERT_EQUAL_FLOAT(0, parser.last_gpvtg.measured_heading_1);
-    TEST_ASSERT_EQUAL_CHAR('T', parser.last_gpvtg.north_type_1);
-    TEST_ASSERT_EQUAL_FLOAT(0, parser.last_gpvtg.measured_heading_2);
-    TEST_ASSERT_EQUAL_CHAR('M', parser.last_gpvtg.north_type_2);
-    TEST_ASSERT_EQUAL_FLOAT(0.097, parser.last_gpvtg.ground_speed_1);
-    TEST_ASSERT_EQUAL_CHAR('N', parser.last_gpvtg.ground_speed_unit_1);
-    TEST_ASSERT_EQUAL_FLOAT(0.179, parser.last_gpvtg.ground_speed_2);
-    TEST_ASSERT_EQUAL_CHAR('K', parser.last_gpvtg.ground_speed_unit_2);
-    TEST_ASSERT_EQUAL_CHAR('A', parser.last_gpvtg.mode);
+    TEST_ASSERT_TRUE(parser.lastGPVTG.isValid);
+    TEST_ASSERT_EQUAL_FLOAT(0, parser.lastGPVTG.measured_heading_1);
+    TEST_ASSERT_EQUAL_CHAR('T', parser.lastGPVTG.north_type_1);
+    TEST_ASSERT_EQUAL_FLOAT(0, parser.lastGPVTG.measured_heading_2);
+    TEST_ASSERT_EQUAL_CHAR('M', parser.lastGPVTG.north_type_2);
+    TEST_ASSERT_EQUAL_FLOAT(0.097, parser.lastGPVTG.ground_speed_1);
+    TEST_ASSERT_EQUAL_CHAR('N', parser.lastGPVTG.ground_speed_unit_1);
+    TEST_ASSERT_EQUAL_FLOAT(0.179, parser.lastGPVTG.ground_speed_2);
+    TEST_ASSERT_EQUAL_CHAR('K', parser.lastGPVTG.ground_speed_unit_2);
+    TEST_ASSERT_EQUAL_CHAR('A', parser.lastGPVTG.mode);
 }
 
 void test_gptxt(void) {
@@ -270,11 +270,11 @@ void test_gptxt(void) {
 #endif
     NMEAParser parser;
     TEST_ASSERT_TRUE(parser.dispatch(testSentence));
-    TEST_ASSERT_TRUE(parser.last_gptxt.isValid);
-    TEST_ASSERT_EQUAL_INT8(1, parser.last_gptxt.number_of_messages);
-    TEST_ASSERT_EQUAL_INT8(1, parser.last_gptxt.sentence_number);
-    TEST_ASSERT_EQUAL_INT8(2, parser.last_gptxt.text_identifier);
-    TEST_ASSERT_EQUAL_STRING(const_cast<const char*>(parser.last_gptxt.message), "ROM CORE 1.00 (59842) Jun 27 2012 17:43:52");
+    TEST_ASSERT_TRUE(parser.lastGPTXT.isValid);
+    TEST_ASSERT_EQUAL_INT8(1, parser.lastGPTXT.number_of_messages);
+    TEST_ASSERT_EQUAL_INT8(1, parser.lastGPTXT.sentence_number);
+    TEST_ASSERT_EQUAL_INT8(2, parser.lastGPTXT.text_identifier);
+    TEST_ASSERT_EQUAL_STRING(const_cast<const char*>(parser.lastGPTXT.message), "ROM CORE 1.00 (59842) Jun 27 2012 17:43:52");
 }
 
 void test_gpgsv(void) {
@@ -285,27 +285,27 @@ void test_gpgsv(void) {
 #endif
     NMEAParser parser;
     TEST_ASSERT_TRUE(parser.dispatch(testSentence));
-    TEST_ASSERT_TRUE(parser.last_gpgsv.isValid);
+    TEST_ASSERT_TRUE(parser.lastGPGSV.isValid);
 
-    TEST_ASSERT_EQUAL_INT16(3, parser.last_gpgsv.number_of_messages);
-    TEST_ASSERT_EQUAL_INT16(1, parser.last_gpgsv.message_idx);
-    TEST_ASSERT_EQUAL_INT16(10, parser.last_gpgsv.sats_in_view);
-    TEST_ASSERT_EQUAL_INT16(5, parser.last_gpgsv.sat1_id);
-    TEST_ASSERT_EQUAL_INT16(7, parser.last_gpgsv.sat1_elevation);
-    TEST_ASSERT_EQUAL_INT16(35, parser.last_gpgsv.sat1_azimuth);
-    TEST_ASSERT_EQUAL_INT16(38, parser.last_gpgsv.sat1_snr);
-    TEST_ASSERT_EQUAL_INT16(16, parser.last_gpgsv.sat2_id);
-    TEST_ASSERT_EQUAL_INT16(41, parser.last_gpgsv.sat2_elevation);
-    TEST_ASSERT_EQUAL_INT16(305, parser.last_gpgsv.sat2_azimuth);
-    TEST_ASSERT_EQUAL_INT16(22, parser.last_gpgsv.sat2_snr);
-    TEST_ASSERT_EQUAL_INT16(18, parser.last_gpgsv.sat3_id);
-    TEST_ASSERT_EQUAL_INT16(57, parser.last_gpgsv.sat3_elevation);
-    TEST_ASSERT_EQUAL_INT16(74, parser.last_gpgsv.sat3_azimuth);
-    TEST_ASSERT_EQUAL_INT16(42, parser.last_gpgsv.sat3_snr);
-    TEST_ASSERT_EQUAL_INT16(20, parser.last_gpgsv.sat4_id);
-    TEST_ASSERT_EQUAL_INT16(13, parser.last_gpgsv.sat4_elevation);
-    TEST_ASSERT_EQUAL_INT16(143, parser.last_gpgsv.sat4_azimuth);
-    TEST_ASSERT_EQUAL_INT16(27, parser.last_gpgsv.sat4_snr);
+    TEST_ASSERT_EQUAL_INT16(3, parser.lastGPGSV.number_of_messages);
+    TEST_ASSERT_EQUAL_INT16(1, parser.lastGPGSV.message_idx);
+    TEST_ASSERT_EQUAL_INT16(10, parser.lastGPGSV.sats_in_view);
+    TEST_ASSERT_EQUAL_INT16(5, parser.lastGPGSV.sat1_id);
+    TEST_ASSERT_EQUAL_INT16(7, parser.lastGPGSV.sat1_elevation);
+    TEST_ASSERT_EQUAL_INT16(35, parser.lastGPGSV.sat1_azimuth);
+    TEST_ASSERT_EQUAL_INT16(38, parser.lastGPGSV.sat1_snr);
+    TEST_ASSERT_EQUAL_INT16(16, parser.lastGPGSV.sat2_id);
+    TEST_ASSERT_EQUAL_INT16(41, parser.lastGPGSV.sat2_elevation);
+    TEST_ASSERT_EQUAL_INT16(305, parser.lastGPGSV.sat2_azimuth);
+    TEST_ASSERT_EQUAL_INT16(22, parser.lastGPGSV.sat2_snr);
+    TEST_ASSERT_EQUAL_INT16(18, parser.lastGPGSV.sat3_id);
+    TEST_ASSERT_EQUAL_INT16(57, parser.lastGPGSV.sat3_elevation);
+    TEST_ASSERT_EQUAL_INT16(74, parser.lastGPGSV.sat3_azimuth);
+    TEST_ASSERT_EQUAL_INT16(42, parser.lastGPGSV.sat3_snr);
+    TEST_ASSERT_EQUAL_INT16(20, parser.lastGPGSV.sat4_id);
+    TEST_ASSERT_EQUAL_INT16(13, parser.lastGPGSV.sat4_elevation);
+    TEST_ASSERT_EQUAL_INT16(143, parser.lastGPGSV.sat4_azimuth);
+    TEST_ASSERT_EQUAL_INT16(27, parser.lastGPGSV.sat4_snr);
 }
 
 void performance(void) {

@@ -1,7 +1,18 @@
 #include <nmeaparser.h>
 
 NMEAParser::NMEAParser() {
-    last_plsr2451.isValid = false;
+    lastPLSR2451.isValid = false;
+	lastPLSR2451.isValid = false;
+	lastPLSR2452.isValid = false;
+	lastPLSR2457.isValid = false;
+	lastGPGGA.isValid = false;
+	lastGPGSA.isValid = false;
+	lastGPGSV.isValid = false;
+	lastHCHDG.isValid = false;
+	lastGPRMC.isValid = false;
+	lastGPGLL.isValid = false;
+	lastGPVTG.isValid = false;
+	lastGPTXT.isValid = false;
 }
 
 #ifdef ARDUINO
@@ -23,255 +34,255 @@ bool NMEAParser::dispatch(const char *str) {
     if (str[0] == '$') {
         //PLSR245X
         if (str[1] == 'P' && str[2] == 'L' && str[3] == 'S' && str[4] == 'R' && str[5] == ',' && str[6] == '2' && str[7] == '4' && str[8] == '5' && str[9] == ',') {
-            if (str[10] == '1') return parse_plsr2451(str);
-            if (str[10] == '2') return parse_plsr2452(str);
-            if (str[10] == '7') return parse_plsr2457(str);
+            if (str[10] == '1') return parsePLSR2451(str);
+            if (str[10] == '2') return parsePLSR2452(str);
+            if (str[10] == '7') return parsePLSR2457(str);
         } else if (str[1] == 'G' && str[2] == 'P') {
             //GPGGA
-            if      (str[3] == 'G' && str[4] == 'G' && str[5] == 'A') return parse_gpgga(str);
+            if      (str[3] == 'G' && str[4] == 'G' && str[5] == 'A') return parseGPGGA(str);
             //GPGSA
-            else if (str[3] == 'G' && str[4] == 'S' && str[5] == 'A') return parse_gpgsa(str);
+            else if (str[3] == 'G' && str[4] == 'S' && str[5] == 'A') return parseGPGSA(str);
             //GPGSV
-            else if (str[3] == 'G' && str[4] == 'S' && str[5] == 'V') return parse_gpgsv(str);
+            else if (str[3] == 'G' && str[4] == 'S' && str[5] == 'V') return parseGPGSV(str);
             //GPRMC
-            else if (str[3] == 'R' && str[4] == 'M' && str[5] == 'C') return parse_gprmc(str);
+            else if (str[3] == 'R' && str[4] == 'M' && str[5] == 'C') return parseGPRMC(str);
             //GPVTG
-            else if (str[3] == 'V' && str[4] == 'T' && str[5] == 'G') return parse_gpvtg(str);
+            else if (str[3] == 'V' && str[4] == 'T' && str[5] == 'G') return parseGPVTG(str);
             //GPTXT
-            else if (str[3] == 'T' && str[4] == 'X' && str[5] == 'T') return parse_gptxt(str);
+            else if (str[3] == 'T' && str[4] == 'X' && str[5] == 'T') return parseGPTXT(str);
             //GPGLL
-            else if (str[3] == 'G' && str[4] == 'L' && str[5] == 'L') return parse_gpgll(str);
+            else if (str[3] == 'G' && str[4] == 'L' && str[5] == 'L') return parseGPGLL(str);
         }
         //HCHDG
-        else if (str[1] == 'H' && str[2] == 'C' && str[3] == 'H' && str[4] == 'D' && str[5] == 'G') return parse_hchdg(str);
+        else if (str[1] == 'H' && str[2] == 'C' && str[3] == 'H' && str[4] == 'D' && str[5] == 'G') return parseHCHDG(str);
     }
     return false;
 }
 
-bool NMEAParser::parse_plsr2451(const char *str) {
+bool NMEAParser::parsePLSR2451(const char *str) {
     checksum=0;
-    scanned = my_sscanf(&last_plsr2451.fieldValidity, str, "$PLSR,245,1,%d,%d,%d,%d,%d,%d,%d,%d,%d*%X",
-            &last_plsr2451.direction,
-            &last_plsr2451.calibration_status,
-            &last_plsr2451.field_intensity,
-            &last_plsr2451.acceleration_x,
-            &last_plsr2451.acceleration_y,
-            &last_plsr2451.acceleration_z,
-            &last_plsr2451.temperature,
-            &last_plsr2451.mounting_mode,
-            &last_plsr2451.current_calibration,
+    scanned = my_sscanf(&lastPLSR2451.fieldValidity, str, "$PLSR,245,1,%d,%d,%d,%d,%d,%d,%d,%d,%d*%X",
+            &lastPLSR2451.direction,
+            &lastPLSR2451.calibration_status,
+            &lastPLSR2451.field_intensity,
+            &lastPLSR2451.acceleration_x,
+            &lastPLSR2451.acceleration_y,
+            &lastPLSR2451.acceleration_z,
+            &lastPLSR2451.temperature,
+            &lastPLSR2451.mounting_mode,
+            &lastPLSR2451.current_calibration,
             &checksum);
 
-    last_plsr2451.isValid = ((scanned == 10) && check_checksum(str));
-    last_processed = NMEAParser::TYPE_PLSR2451;
-    return last_plsr2451.isValid;
+    lastPLSR2451.isValid = ((scanned == 10) && verifyChecksum(str));
+    lastParsed = NMEAParser::TYPE_PLSR2451;
+    return lastPLSR2451.isValid;
 }
 
-bool NMEAParser::parse_plsr2452(const char *str) {
+bool NMEAParser::parsePLSR2452(const char *str) {
     checksum=0;
-    scanned = my_sscanf(&last_plsr2452.fieldValidity, str, "$PLSR,245,2,%d,%d,%d,%d,%d,%d,%d,%d,%d*%X",
-            &last_plsr2452.xx,
-            &last_plsr2452.yx,
-            &last_plsr2452.zx,
-            &last_plsr2452.xy,
-            &last_plsr2452.yy,
-            &last_plsr2452.zy,
-            &last_plsr2452.xz,
-            &last_plsr2452.yz,
-            &last_plsr2452.zz,
+    scanned = my_sscanf(&lastPLSR2452.fieldValidity, str, "$PLSR,245,2,%d,%d,%d,%d,%d,%d,%d,%d,%d*%X",
+            &lastPLSR2452.xx,
+            &lastPLSR2452.yx,
+            &lastPLSR2452.zx,
+            &lastPLSR2452.xy,
+            &lastPLSR2452.yy,
+            &lastPLSR2452.zy,
+            &lastPLSR2452.xz,
+            &lastPLSR2452.yz,
+            &lastPLSR2452.zz,
             &checksum);
 
-    last_plsr2452.isValid = ((scanned == 10) && check_checksum(str));
-    last_processed = NMEAParser::TYPE_PLSR2452;
-    return last_plsr2452.isValid;
+    lastPLSR2452.isValid = ((scanned == 10) && verifyChecksum(str));
+    lastParsed = NMEAParser::TYPE_PLSR2452;
+    return lastPLSR2452.isValid;
 }
 
-bool NMEAParser::parse_plsr2457(const char *str) {
+bool NMEAParser::parsePLSR2457(const char *str) {
     checksum=0;
-    scanned = my_sscanf(&last_plsr2457.fieldValidity, str, "$PLSR,245,7,%d,%d,%d*%X",
-           &last_plsr2457.gps_speed_east,
-           &last_plsr2457.gps_speed_north,
-           &last_plsr2457.gps_speed_up,
+    scanned = my_sscanf(&lastPLSR2457.fieldValidity, str, "$PLSR,245,7,%d,%d,%d*%X",
+           &lastPLSR2457.gps_speed_east,
+           &lastPLSR2457.gps_speed_north,
+           &lastPLSR2457.gps_speed_up,
            &checksum);
 
-    last_plsr2457.isValid = ((scanned == 4) && check_checksum(str));
-    last_processed = NMEAParser::TYPE_PLSR2457;
-    return last_plsr2457.isValid;
+    lastPLSR2457.isValid = ((scanned == 4) && verifyChecksum(str));
+    lastParsed = NMEAParser::TYPE_PLSR2457;
+    return lastPLSR2457.isValid;
 }
 
-bool NMEAParser::parse_gpgga(const char *str) {
+bool NMEAParser::parseGPGGA(const char *str) {
     checksum = 0;
-    scanned = my_sscanf(&last_gpgga.fieldValidity, str, "$GPGGA,%s,%s,%c,%s,%c,%d,%d,%f,%f,%s,%f,%s,%f,%d*%X",
-            last_gpgga.utc_time,
-            last_gpgga.latitude,
-            &last_gpgga.north_south_indicator,
-            last_gpgga.longitude,
-            &last_gpgga.east_west_indicator,
-            &last_gpgga.position_fix,
-            &last_gpgga.satellites_used,
-            &last_gpgga.hdop,
-            &last_gpgga.msl_altitude,
-            last_gpgga.msl_unit,
-            &last_gpgga.geoid_separation,
-            last_gpgga.geoid_unit,
-            &last_gpgga.age_of_diff_corr,
-            &last_gpgga.station_id,
+    scanned = my_sscanf(&lastGPGGA.fieldValidity, str, "$GPGGA,%s,%s,%c,%s,%c,%d,%d,%f,%f,%s,%f,%s,%f,%d*%X",
+            lastGPGGA.utc_time,
+            lastGPGGA.latitude,
+            &lastGPGGA.north_south_indicator,
+            lastGPGGA.longitude,
+            &lastGPGGA.east_west_indicator,
+            &lastGPGGA.position_fix,
+            &lastGPGGA.satellites_used,
+            &lastGPGGA.hdop,
+            &lastGPGGA.msl_altitude,
+            lastGPGGA.msl_unit,
+            &lastGPGGA.geoid_separation,
+            lastGPGGA.geoid_unit,
+            &lastGPGGA.age_of_diff_corr,
+            &lastGPGGA.station_id,
             &checksum);
 
-    last_gpgga.isValid = ((scanned == 15) && check_checksum(str));
-    last_processed = NMEAParser::TYPE_GPGGA;
-    return last_gpgga.isValid;
+    lastGPGGA.isValid = ((scanned == 15) && verifyChecksum(str));
+    lastParsed = NMEAParser::TYPE_GPGGA;
+    return lastGPGGA.isValid;
 }
 
-bool NMEAParser::parse_gpgsa(const char *str) {
+bool NMEAParser::parseGPGSA(const char *str) {
     checksum = 0;
-    scanned = my_sscanf(&last_gpgsa.fieldValidity, str, "$GPGSA,%c,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%f,%f,%f*%X",
-            &last_gpgsa.mode1,
-            &last_gpgsa.mode2,
-            &last_gpgsa.sat_channel_1,
-            &last_gpgsa.sat_channel_2,
-            &last_gpgsa.sat_channel_3,
-            &last_gpgsa.sat_channel_4,
-            &last_gpgsa.sat_channel_5,
-            &last_gpgsa.sat_channel_6,
-            &last_gpgsa.sat_channel_7,
-            &last_gpgsa.sat_channel_8,
-            &last_gpgsa.sat_channel_9,
-            &last_gpgsa.sat_channel_10,
-            &last_gpgsa.sat_channel_11,
-            &last_gpgsa.sat_channel_12,
-            &last_gpgsa.pdop,
-            &last_gpgsa.hdop,
-            &last_gpgsa.vdop,
+    scanned = my_sscanf(&lastGPGSA.fieldValidity, str, "$GPGSA,%c,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%f,%f,%f*%X",
+            &lastGPGSA.mode1,
+            &lastGPGSA.mode2,
+            &lastGPGSA.sat_channel_1,
+            &lastGPGSA.sat_channel_2,
+            &lastGPGSA.sat_channel_3,
+            &lastGPGSA.sat_channel_4,
+            &lastGPGSA.sat_channel_5,
+            &lastGPGSA.sat_channel_6,
+            &lastGPGSA.sat_channel_7,
+            &lastGPGSA.sat_channel_8,
+            &lastGPGSA.sat_channel_9,
+            &lastGPGSA.sat_channel_10,
+            &lastGPGSA.sat_channel_11,
+            &lastGPGSA.sat_channel_12,
+            &lastGPGSA.pdop,
+            &lastGPGSA.hdop,
+            &lastGPGSA.vdop,
             &checksum);
 
-    last_gpgsa.isValid = ((scanned == 18) && check_checksum(str));
-    last_processed = NMEAParser::TYPE_GPGSA;
-    return last_gpgsa.isValid;
+    lastGPGSA.isValid = ((scanned == 18) && verifyChecksum(str));
+    lastParsed = NMEAParser::TYPE_GPGSA;
+    return lastGPGSA.isValid;
 }
 
-bool NMEAParser::parse_gpgsv(const char *str) {
+bool NMEAParser::parseGPGSV(const char *str) {
     checksum = 0;
-    scanned = my_sscanf(&last_gpgsv.fieldValidity, str, "$GPGSV,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d*%X",
-            &last_gpgsv.number_of_messages,
-            &last_gpgsv.message_idx,
-            &last_gpgsv.sats_in_view,
-            &last_gpgsv.sat1_id,
-            &last_gpgsv.sat1_elevation,
-            &last_gpgsv.sat1_azimuth,
-            &last_gpgsv.sat1_snr,
-            &last_gpgsv.sat2_id,
-            &last_gpgsv.sat2_elevation,
-            &last_gpgsv.sat2_azimuth,
-            &last_gpgsv.sat2_snr,
-            &last_gpgsv.sat3_id,
-            &last_gpgsv.sat3_elevation,
-            &last_gpgsv.sat3_azimuth,
-            &last_gpgsv.sat3_snr,
-            &last_gpgsv.sat4_id,
-            &last_gpgsv.sat4_elevation,
-            &last_gpgsv.sat4_azimuth,
-            &last_gpgsv.sat4_snr,
+    scanned = my_sscanf(&lastGPGSV.fieldValidity, str, "$GPGSV,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d*%X",
+            &lastGPGSV.number_of_messages,
+            &lastGPGSV.message_idx,
+            &lastGPGSV.sats_in_view,
+            &lastGPGSV.sat1_id,
+            &lastGPGSV.sat1_elevation,
+            &lastGPGSV.sat1_azimuth,
+            &lastGPGSV.sat1_snr,
+            &lastGPGSV.sat2_id,
+            &lastGPGSV.sat2_elevation,
+            &lastGPGSV.sat2_azimuth,
+            &lastGPGSV.sat2_snr,
+            &lastGPGSV.sat3_id,
+            &lastGPGSV.sat3_elevation,
+            &lastGPGSV.sat3_azimuth,
+            &lastGPGSV.sat3_snr,
+            &lastGPGSV.sat4_id,
+            &lastGPGSV.sat4_elevation,
+            &lastGPGSV.sat4_azimuth,
+            &lastGPGSV.sat4_snr,
             &checksum);
 
-    last_gpgsv.isValid = ((scanned == 20) && check_checksum(str));
-    last_processed = NMEAParser::TYPE_GPGSV;
-    return last_gpgsv.isValid;
+    lastGPGSV.isValid = ((scanned == 20) && verifyChecksum(str));
+    lastParsed = NMEAParser::TYPE_GPGSV;
+    return lastGPGSV.isValid;
 }
 
-bool NMEAParser::parse_hchdg(const char *str) {
+bool NMEAParser::parseHCHDG(const char *str) {
     checksum = 0;
-    scanned = my_sscanf(&last_hchdg.fieldValidity, str, "$HCHDG,%d,%f,%c,%f,%c*%X",
-            &last_hchdg.heading,
-            &last_hchdg.deviation,
-            &last_hchdg.dev_direction,
-            &last_hchdg.variation,
-            &last_hchdg.var_direction,
+    scanned = my_sscanf(&lastHCHDG.fieldValidity, str, "$HCHDG,%d,%f,%c,%f,%c*%X",
+            &lastHCHDG.heading,
+            &lastHCHDG.deviation,
+            &lastHCHDG.dev_direction,
+            &lastHCHDG.variation,
+            &lastHCHDG.var_direction,
             &checksum);
 
-    last_hchdg.isValid = ((scanned == 6) && check_checksum(str));
-    last_processed = NMEAParser::TYPE_HCHDG;
-    return last_hchdg.isValid;
+    lastHCHDG.isValid = ((scanned == 6) && verifyChecksum(str));
+    lastParsed = NMEAParser::TYPE_HCHDG;
+    return lastHCHDG.isValid;
 }
 
-bool NMEAParser::parse_gprmc(const char *str) {
+bool NMEAParser::parseGPRMC(const char *str) {
     checksum = 0;
-    scanned = my_sscanf(&last_gprmc.fieldValidity, str, "$GPRMC,%s,%c,%s,%c,%s,%c,%f,%f,%s,%f,%c,%c*%X",
-            &last_gprmc.utc_time,
-            &last_gprmc.status,
-            last_gprmc.latitude,
-            &last_gprmc.north_south_indicator,
-            last_gprmc.longitude,
-            &last_gprmc.east_west_indicator,
-            &last_gprmc.speed_over_ground,
-            &last_gprmc.course_over_ground,
-            last_gprmc.date,
-            &last_gprmc.magnetic_variation,
-            &last_gprmc.variation_sense,
-            &last_gprmc.mode,
+    scanned = my_sscanf(&lastGPRMC.fieldValidity, str, "$GPRMC,%s,%c,%s,%c,%s,%c,%f,%f,%s,%f,%c,%c*%X",
+            &lastGPRMC.utc_time,
+            &lastGPRMC.status,
+            lastGPRMC.latitude,
+            &lastGPRMC.north_south_indicator,
+            lastGPRMC.longitude,
+            &lastGPRMC.east_west_indicator,
+            &lastGPRMC.speed_over_ground,
+            &lastGPRMC.course_over_ground,
+            lastGPRMC.date,
+            &lastGPRMC.magnetic_variation,
+            &lastGPRMC.variation_sense,
+            &lastGPRMC.mode,
             &checksum);
 
-    last_gprmc.isValid = ((scanned == 13) && check_checksum(str));
-    last_processed = NMEAParser::TYPE_GPRMC;
-    return last_gprmc.isValid;
+    lastGPRMC.isValid = ((scanned == 13) && verifyChecksum(str));
+    lastParsed = NMEAParser::TYPE_GPRMC;
+    return lastGPRMC.isValid;
 }
 
-bool NMEAParser::parse_gpgll(const char *str) {
+bool NMEAParser::parseGPGLL(const char *str) {
     checksum = 0;
-    scanned = my_sscanf(&last_gpgll.fieldValidity, str, "$GPGLL,%s,%c,%s,%c,%s,%c*%X",
-            last_gpgll.latitude,
-            &last_gpgll.north_south_indicator,
-            last_gpgll.longitude,
-            &last_gpgll.east_west_indicator,
-            last_gpgll.fix_time,
-            &last_gpgll.data_active,
+    scanned = my_sscanf(&lastGPGLL.fieldValidity, str, "$GPGLL,%s,%c,%s,%c,%s,%c*%X",
+            lastGPGLL.latitude,
+            &lastGPGLL.north_south_indicator,
+            lastGPGLL.longitude,
+            &lastGPGLL.east_west_indicator,
+            lastGPGLL.fix_time,
+            &lastGPGLL.data_active,
             &checksum);
 
-    last_gpgll.isValid = ((scanned == 7) && check_checksum(str));
-    last_processed = NMEAParser::TYPE_GPGLL;
-    return last_gpgll.isValid;
+    lastGPGLL.isValid = ((scanned == 7) && verifyChecksum(str));
+    lastParsed = NMEAParser::TYPE_GPGLL;
+    return lastGPGLL.isValid;
 }
 
-bool NMEAParser::parse_gpvtg(const char *str) {
+bool NMEAParser::parseGPVTG(const char *str) {
     checksum = 0;
-    scanned = my_sscanf(&last_gpvtg.fieldValidity, str, "$GPVTG,%f,%c,%f,%c,%f,%c,%f,%c,%c*%X",
-            &last_gpvtg.measured_heading_1,
-            &last_gpvtg.north_type_1,
-            &last_gpvtg.measured_heading_2,
-            &last_gpvtg.north_type_2,
-            &last_gpvtg.ground_speed_1,
-            &last_gpvtg.ground_speed_unit_1,
-            &last_gpvtg.ground_speed_2,
-            &last_gpvtg.ground_speed_unit_2,
-            &last_gpvtg.mode,
+    scanned = my_sscanf(&lastGPVTG.fieldValidity, str, "$GPVTG,%f,%c,%f,%c,%f,%c,%f,%c,%c*%X",
+            &lastGPVTG.measured_heading_1,
+            &lastGPVTG.north_type_1,
+            &lastGPVTG.measured_heading_2,
+            &lastGPVTG.north_type_2,
+            &lastGPVTG.ground_speed_1,
+            &lastGPVTG.ground_speed_unit_1,
+            &lastGPVTG.ground_speed_2,
+            &lastGPVTG.ground_speed_unit_2,
+            &lastGPVTG.mode,
             &checksum);
 
-    last_gpvtg.isValid = ((scanned == 10) && check_checksum(str));
-    last_processed = NMEAParser::TYPE_GPVTG;
-    return last_gpvtg.isValid;
+    lastGPVTG.isValid = ((scanned == 10) && verifyChecksum(str));
+    lastParsed = NMEAParser::TYPE_GPVTG;
+    return lastGPVTG.isValid;
 }
 
-bool NMEAParser::parse_gptxt(const char *str) {
+bool NMEAParser::parseGPTXT(const char *str) {
     checksum = 0;
-    scanned = my_sscanf(&last_gptxt.fieldValidity, str, "$GPTXT,%d,%d,%d,%s*%X",
-            &last_gptxt.number_of_messages,
-            &last_gptxt.sentence_number,
-            &last_gptxt.text_identifier,
-            last_gptxt.message,
+    scanned = my_sscanf(&lastGPTXT.fieldValidity, str, "$GPTXT,%d,%d,%d,%s*%X",
+            &lastGPTXT.number_of_messages,
+            &lastGPTXT.sentence_number,
+            &lastGPTXT.text_identifier,
+            lastGPTXT.message,
             &checksum);
 
-    last_gptxt.isValid = ((scanned == 5) && check_checksum(str));
-    last_processed = NMEAParser::TYPE_GPTXT;
-    return last_gptxt.isValid;
+    lastGPTXT.isValid = ((scanned == 5) && verifyChecksum(str));
+    lastParsed = NMEAParser::TYPE_GPTXT;
+    return lastGPTXT.isValid;
 }
 
 
 
 
 
-bool NMEAParser::check_checksum(const char *str) {
+bool NMEAParser::verifyChecksum(const char *str) {
     //compute normal checksum
-    char calculated_sum = generate_checksum(str);
+    char calculated_sum = generateChecksum(str);
 
     //retrieve checksum from the str
     //go to the '*'
@@ -289,7 +300,7 @@ bool NMEAParser::check_checksum(const char *str) {
     return (calculated_sum == retrieved_sum);
 }
 
-char NMEAParser::generate_checksum(const char *str) {
+char NMEAParser::generateChecksum(const char *str) {
     char *ptr = const_cast<char*>(str+1);
     char sum=0;
     while(*ptr && *ptr!='*') sum ^= *(ptr++);

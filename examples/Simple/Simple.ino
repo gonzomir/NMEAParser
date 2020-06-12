@@ -30,25 +30,25 @@ void setup() {
                 case NMEAParser::TYPE_GPRMC:
                     //show some of the sentence's data
                     Serial.println("\nFound GPRMC sentence");
-                    sprintf(buffer, " I'm at %s %c / %s %c", parser.last_gprmc.latitude, parser.last_gprmc.north_south_indicator, parser.last_gprmc.longitude, parser.last_gprmc.east_west_indicator);
+                    sprintf(buffer, " I'm at %s %c / %s %c", parser.lastGPRMC.latitude, parser.lastGPRMC.north_south_indicator, parser.lastGPRMC.longitude, parser.lastGPRMC.east_west_indicator);
                     Serial.println(buffer);
                     break;
                 case NMEAParser::TYPE_GPGSV:
                     //show some of the sentence's data
                     //GPGSV sentences most of the time comes in pair, sometimes more, as each of these can give info about 4 sats at a time.
                     //So let's display this header only once
-                    if (parser.last_gpgsv.message_idx == 1) { 
+                    if (parser.lastGPGSV.message_idx == 1) {
                         Serial.println("\nFound GPGSV sentence");
-                        sprintf(buffer, " GPS can see %d satellites:", parser.last_gpgsv.sats_in_view);
+                        sprintf(buffer, " GPS can see %d satellites:", parser.lastGPGSV.sats_in_view);
                         Serial.println(buffer);
                     }
-                    sprintf(buffer, " Satellite ID=%X, elevation=%d, azimuth=%d, signal/noise ratio: %d", parser.last_gpgsv.sat1_id, parser.last_gpgsv.sat1_elevation, parser.last_gpgsv.sat1_azimuth, parser.last_gpgsv.sat1_snr);
+                    sprintf(buffer, " Satellite ID=%X, elevation=%d, azimuth=%d, signal/noise ratio: %d", parser.lastGPGSV.sat1_id, parser.lastGPGSV.sat1_elevation, parser.lastGPGSV.sat1_azimuth, parser.lastGPGSV.sat1_snr);
                     Serial.println(buffer);
-                    sprintf(buffer, " Satellite ID=%X, elevation=%d, azimuth=%d, signal/noise ratio: %d", parser.last_gpgsv.sat2_id, parser.last_gpgsv.sat2_elevation, parser.last_gpgsv.sat2_azimuth, parser.last_gpgsv.sat2_snr);
+                    sprintf(buffer, " Satellite ID=%X, elevation=%d, azimuth=%d, signal/noise ratio: %d", parser.lastGPGSV.sat2_id, parser.lastGPGSV.sat2_elevation, parser.lastGPGSV.sat2_azimuth, parser.lastGPGSV.sat2_snr);
                     Serial.println(buffer);
-                    sprintf(buffer, " Satellite ID=%X, elevation=%d, azimuth=%d, signal/noise ratio: %d", parser.last_gpgsv.sat3_id, parser.last_gpgsv.sat3_elevation, parser.last_gpgsv.sat3_azimuth, parser.last_gpgsv.sat3_snr);
+                    sprintf(buffer, " Satellite ID=%X, elevation=%d, azimuth=%d, signal/noise ratio: %d", parser.lastGPGSV.sat3_id, parser.lastGPGSV.sat3_elevation, parser.lastGPGSV.sat3_azimuth, parser.lastGPGSV.sat3_snr);
                     Serial.println(buffer);
-                    sprintf(buffer, " Satellite ID=%X, elevation=%d, azimuth=%d, signal/noise ratio: %d", parser.last_gpgsv.sat4_id, parser.last_gpgsv.sat4_elevation, parser.last_gpgsv.sat4_azimuth, parser.last_gpgsv.sat4_snr);
+                    sprintf(buffer, " Satellite ID=%X, elevation=%d, azimuth=%d, signal/noise ratio: %d", parser.lastGPGSV.sat4_id, parser.lastGPGSV.sat4_elevation, parser.lastGPGSV.sat4_azimuth, parser.lastGPGSV.sat4_snr);
                     Serial.println(buffer);
                     break;
                 case NMEAParser::UNKNOWN:
@@ -67,7 +67,7 @@ void setup() {
             Serial.print("\nCouldn't parse \"");
             Serial.print(strings[i]);
             Serial.print("\"");
-        } 
+        }
     }
 }
 
