@@ -276,10 +276,6 @@ bool NMEAParser::parseGPTXT(const char *str) {
     return lastGPTXT.isValid;
 }
 
-
-
-
-
 bool NMEAParser::verifyChecksum(const char *str) {
     //compute normal checksum
     char calculated_sum = generateChecksum(str);
@@ -288,11 +284,14 @@ bool NMEAParser::verifyChecksum(const char *str) {
     //go to the '*'
     char *ptr = const_cast<char*>(str);
     while((*ptr) && (*ptr!='*')) ptr++;
+	//skip the '*'
     ptr++;
 
     int16_t retrieved_sum = 0;
+	//single char checksum
     if (!*(ptr+1))
         retrieved_sum = my_atoh(*ptr);
+	//two characters checksum
     else if (!*(ptr+2))
         retrieved_sum = (my_atoh(*ptr)*16) + my_atoh(*(ptr+1));
 
@@ -303,15 +302,21 @@ bool NMEAParser::verifyChecksum(const char *str) {
 char NMEAParser::generateChecksum(const char *str) {
     char *ptr = const_cast<char*>(str+1);
     char sum=0;
-    while(*ptr && *ptr!='*') sum ^= *(ptr++);
+	//computes the XOR checksum
+    while(*ptr && *ptr!='*') {
+		sum ^= *(ptr++);
+	}
     return sum;
 }
 
 int16_t NMEAParser::my_atoh(char a) {
+	//converts uppercase hex
     if (a >= 'A' && a <= 'F')
         return a - 'A' + 10;
+	//converts lowecase hex
     else if (a >= 'a' && a <= 'f')
         return a - 'a' + 10;
+	//converts digits
     else
         return a - '0';
 }
@@ -339,32 +344,41 @@ int16_t NMEAParser::my_strlen(const char* str) {
 int32_t NMEAParser::my_atoi(const char *str) {
     int32_t ret = 0;
     int32_t sign = 1;
+	//check for a minus sign
     if (*str == '-') {
         sign = -1;
         str++;
     }
+	//process each digit
     while (IS_DIGIT(*str))
         ret = 10 * ret + *str++ - '0';
     return sign*ret;
 }
 
 float NMEAParser::my_atof(const char *s) {
+	//the resule
     float a = 0.0;
+	// exponent, if we ever find one
     int16_t e = 0;
     int16_t c;
+
+	//process digits until there is no more
     while ((c = *s++) != '\0' && IS_DIGIT(c)) {
         a = a*10.0 + (c - '0');
     }
+	//process decimal point
     if (c == '.') {
         while ((c = *s++) != '\0' && IS_DIGIT(c)) {
             a = a*10.0 + (c - '0');
             e = e-1;
         }
     }
+	//process exponents
     if (c == 'e' || c == 'E') {
         int16_t sign = 1;
         int16_t i = 0;
         c = *s++;
+		//exponent sign
         if (c == '+') {
             c = *s++;
         } else if (c == '-') {
@@ -425,7 +439,8 @@ int16_t NMEAParser::my_sscanf(int16_t *field_validity, const char *src, const ch
             int16_t *i;
 
             switch (*++fp) {
-            //compute an int
+
+			//compute an int
             case 'i':
             case 'd': {
                 i = va_arg(ap, int16_t *);
@@ -437,7 +452,8 @@ int16_t NMEAParser::my_sscanf(int16_t *field_validity, const char *src, const ch
                 }
                 break;
             }
-            //compute a float
+
+			//compute a float
             case 'f': {
                 float *f = va_arg(ap, float *);
                 if (!*buf) {
@@ -448,19 +464,22 @@ int16_t NMEAParser::my_sscanf(int16_t *field_validity, const char *src, const ch
                 }
                 break;
             }
-            //compute a string
+
+			//compute a string
             case 's':
                 a = va_arg(ap, char *);
                 my_strncpy(a, buf, my_strlen(buf)+1);
                 if (buf[0]) *field_validity = SET_BIT(*field_validity, conv);
                 break;
+
             //compute a single char
             case 'c':
                 a = va_arg(ap, char *);
                 *a = buf[0];
                 if (buf[0]) *field_validity = SET_BIT(*field_validity, conv);
                 break;
-            //compute an hexadecimal
+
+			//compute an hexadecimal
             case 'X':
             case 'x':
                 i = va_arg(ap, int16_t *);

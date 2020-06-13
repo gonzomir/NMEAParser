@@ -337,18 +337,18 @@ public:
 	 * @brief The types of NMEA sentences the parser can handle.
 	 */
 	enum STRINGS_TYPES {
-		UNKNOWN=0,
-		TYPE_PLSR2451,
-		TYPE_PLSR2452,
-		TYPE_PLSR2457,
-		TYPE_GPGGA,
-		TYPE_GPGSA,
-		TYPE_GPGSV,
-		TYPE_HCHDG,
-		TYPE_GPRMC,
-		TYPE_GPGLL,
-		TYPE_GPVTG,
-		TYPE_GPTXT
+		UNKNOWN=0,			/**< Unknown type, hasn't been parsed*/
+		TYPE_PLSR2451,		/**< PLSR2451*/
+		TYPE_PLSR2452,		/**< PLSR2452*/
+		TYPE_PLSR2457,		/**< PLSR2457*/
+		TYPE_GPGGA,			/**< GPGGA*/
+		TYPE_GPGSA,			/**< GPGSA*/
+		TYPE_GPGSV,			/**< GPGSV*/
+		TYPE_HCHDG,			/**< HCHDG*/
+		TYPE_GPRMC,			/**< GPRMC*/
+		TYPE_GPGLL,			/**< GPGLL*/
+		TYPE_GPVTG,			/**< GPVTG*/
+		TYPE_GPTXT			/**< GPTXT*/
 	};
 
 	/**
