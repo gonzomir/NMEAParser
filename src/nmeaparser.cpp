@@ -72,7 +72,7 @@ bool NMEAParser::dispatch(const char *str) {
 
 bool NMEAParser::parsePLSR2451(const char *str) {
     checksum=0;
-    scanned = my_sscanf(&lastPLSR2451.fieldValidity, str, "$PLSR,245,1,%d,%d,%d,%d,%d,%d,%d,%d,%d*%X",
+    scanned = mysscanf(&lastPLSR2451.fieldValidity, str, "$PLSR,245,1,%d,%d,%d,%d,%d,%d,%d,%d,%d*%X",
             &lastPLSR2451.direction,
             &lastPLSR2451.calibration_status,
             &lastPLSR2451.field_intensity,
@@ -91,7 +91,7 @@ bool NMEAParser::parsePLSR2451(const char *str) {
 
 bool NMEAParser::parsePLSR2452(const char *str) {
     checksum=0;
-    scanned = my_sscanf(&lastPLSR2452.fieldValidity, str, "$PLSR,245,2,%d,%d,%d,%d,%d,%d,%d,%d,%d*%X",
+    scanned = mysscanf(&lastPLSR2452.fieldValidity, str, "$PLSR,245,2,%d,%d,%d,%d,%d,%d,%d,%d,%d*%X",
             &lastPLSR2452.xx,
             &lastPLSR2452.yx,
             &lastPLSR2452.zx,
@@ -110,7 +110,7 @@ bool NMEAParser::parsePLSR2452(const char *str) {
 
 bool NMEAParser::parsePLSR2457(const char *str) {
     checksum=0;
-    scanned = my_sscanf(&lastPLSR2457.fieldValidity, str, "$PLSR,245,7,%d,%d,%d*%X",
+    scanned = mysscanf(&lastPLSR2457.fieldValidity, str, "$PLSR,245,7,%d,%d,%d*%X",
            &lastPLSR2457.gps_speed_east,
            &lastPLSR2457.gps_speed_north,
            &lastPLSR2457.gps_speed_up,
@@ -123,7 +123,7 @@ bool NMEAParser::parsePLSR2457(const char *str) {
 
 bool NMEAParser::parseGPGGA(const char *str) {
     checksum = 0;
-    scanned = my_sscanf(&lastGPGGA.fieldValidity, str, "$GPGGA,%s,%s,%c,%s,%c,%d,%d,%f,%f,%s,%f,%s,%f,%d*%X",
+    scanned = mysscanf(&lastGPGGA.fieldValidity, str, "$GPGGA,%s,%s,%c,%s,%c,%d,%d,%f,%f,%s,%f,%s,%f,%d*%X",
             lastGPGGA.utc_time,
             lastGPGGA.latitude,
             &lastGPGGA.north_south_indicator,
@@ -147,7 +147,7 @@ bool NMEAParser::parseGPGGA(const char *str) {
 
 bool NMEAParser::parseGPGSA(const char *str) {
     checksum = 0;
-    scanned = my_sscanf(&lastGPGSA.fieldValidity, str, "$GPGSA,%c,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%f,%f,%f*%X",
+    scanned = mysscanf(&lastGPGSA.fieldValidity, str, "$GPGSA,%c,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%f,%f,%f*%X",
             &lastGPGSA.mode1,
             &lastGPGSA.mode2,
             &lastGPGSA.sat_channel_1,
@@ -174,7 +174,7 @@ bool NMEAParser::parseGPGSA(const char *str) {
 
 bool NMEAParser::parseGPGSV(const char *str) {
     checksum = 0;
-    scanned = my_sscanf(&lastGPGSV.fieldValidity, str, "$GPGSV,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d*%X",
+    scanned = mysscanf(&lastGPGSV.fieldValidity, str, "$GPGSV,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d*%X",
             &lastGPGSV.number_of_messages,
             &lastGPGSV.message_idx,
             &lastGPGSV.sats_in_view,
@@ -203,7 +203,7 @@ bool NMEAParser::parseGPGSV(const char *str) {
 
 bool NMEAParser::parseHCHDG(const char *str) {
     checksum = 0;
-    scanned = my_sscanf(&lastHCHDG.fieldValidity, str, "$HCHDG,%d,%f,%c,%f,%c*%X",
+    scanned = mysscanf(&lastHCHDG.fieldValidity, str, "$HCHDG,%d,%f,%c,%f,%c*%X",
             &lastHCHDG.heading,
             &lastHCHDG.deviation,
             &lastHCHDG.dev_direction,
@@ -218,7 +218,7 @@ bool NMEAParser::parseHCHDG(const char *str) {
 
 bool NMEAParser::parseGPRMC(const char *str) {
     checksum = 0;
-    scanned = my_sscanf(&lastGPRMC.fieldValidity, str, "$GPRMC,%s,%c,%s,%c,%s,%c,%f,%f,%s,%f,%c,%c*%X",
+    scanned = mysscanf(&lastGPRMC.fieldValidity, str, "$GPRMC,%s,%c,%s,%c,%s,%c,%f,%f,%s,%f,%c,%c*%X",
             &lastGPRMC.utc_time,
             &lastGPRMC.status,
             lastGPRMC.latitude,
@@ -240,7 +240,7 @@ bool NMEAParser::parseGPRMC(const char *str) {
 
 bool NMEAParser::parseGPGLL(const char *str) {
     checksum = 0;
-    scanned = my_sscanf(&lastGPGLL.fieldValidity, str, "$GPGLL,%s,%c,%s,%c,%s,%c*%X",
+    scanned = mysscanf(&lastGPGLL.fieldValidity, str, "$GPGLL,%s,%c,%s,%c,%s,%c*%X",
             lastGPGLL.latitude,
             &lastGPGLL.north_south_indicator,
             lastGPGLL.longitude,
@@ -256,7 +256,7 @@ bool NMEAParser::parseGPGLL(const char *str) {
 
 bool NMEAParser::parseGPVTG(const char *str) {
     checksum = 0;
-    scanned = my_sscanf(&lastGPVTG.fieldValidity, str, "$GPVTG,%f,%c,%f,%c,%f,%c,%f,%c,%c*%X",
+    scanned = mysscanf(&lastGPVTG.fieldValidity, str, "$GPVTG,%f,%c,%f,%c,%f,%c,%f,%c,%c*%X",
             &lastGPVTG.measured_heading_1,
             &lastGPVTG.north_type_1,
             &lastGPVTG.measured_heading_2,
@@ -275,7 +275,7 @@ bool NMEAParser::parseGPVTG(const char *str) {
 
 bool NMEAParser::parseGPTXT(const char *str) {
     checksum = 0;
-    scanned = my_sscanf(&lastGPTXT.fieldValidity, str, "$GPTXT,%d,%d,%d,%s*%X",
+    scanned = mysscanf(&lastGPTXT.fieldValidity, str, "$GPTXT,%d,%d,%d,%s*%X",
             &lastGPTXT.number_of_messages,
             &lastGPTXT.sentence_number,
             &lastGPTXT.text_identifier,
@@ -301,10 +301,10 @@ bool NMEAParser::verifyChecksum(const char *str) {
     int16_t retrieved_sum = 0;
 	//single char checksum
     if (!*(ptr+1))
-        retrieved_sum = my_atoh(*ptr);
+        retrieved_sum = myatoh(*ptr);
 	//two characters checksum
     else if (!*(ptr+2))
-        retrieved_sum = (my_atoh(*ptr)*16) + my_atoh(*(ptr+1));
+        retrieved_sum = (myatoh(*ptr)*16) + myatoh(*(ptr+1));
 
 
     return (calculated_sum == retrieved_sum);
@@ -320,7 +320,7 @@ char NMEAParser::generateChecksum(const char *str) {
     return sum;
 }
 
-int16_t NMEAParser::my_atoh(char a) {
+int16_t NMEAParser::myatoh(char a) {
 	//converts uppercase hex
     if (a >= 'A' && a <= 'F')
         return a - 'A' + 10;
@@ -332,7 +332,7 @@ int16_t NMEAParser::my_atoh(char a) {
         return a - '0';
 }
 
-char *NMEAParser::my_strncpy(char *dst, const char *src, int16_t n) {
+char *NMEAParser::mystrncpy(char *dst, const char *src, int16_t n) {
     if (n!=0) {
         char *d = dst;
         const char *s = src;
@@ -346,13 +346,13 @@ char *NMEAParser::my_strncpy(char *dst, const char *src, int16_t n) {
     return dst;
 }
 
-int16_t NMEAParser::my_strlen(const char* str) {
+int16_t NMEAParser::mystrlen(const char* str) {
     int16_t s = 0;
     while(str[s++]);
     return s;
 }
 
-int32_t NMEAParser::my_atoi(const char *str) {
+int32_t NMEAParser::myatoi(const char *str) {
     int32_t ret = 0;
     int32_t sign = 1;
 	//check for a minus sign
@@ -366,7 +366,7 @@ int32_t NMEAParser::my_atoi(const char *str) {
     return sign*ret;
 }
 
-float NMEAParser::my_atof(const char *s) {
+float NMEAParser::myatof(const char *s) {
 	//the resule
     float a = 0.0;
 	// exponent, if we ever find one
@@ -413,7 +413,7 @@ float NMEAParser::my_atof(const char *s) {
     return a;
 }
 
-int16_t NMEAParser::my_sscanf(int16_t *field_validity, const char *src, const char *format, ... ) {
+int16_t NMEAParser::mysscanf(int16_t *field_validity, const char *src, const char *format, ... ) {
     va_list ap;
 
     //pointers to types that can be converted
@@ -458,7 +458,7 @@ int16_t NMEAParser::my_sscanf(int16_t *field_validity, const char *src, const ch
                 if (!*buf) {
                     *i = 0;
                 } else {
-                    *i = my_atoi(buf);
+                    *i = myatoi(buf);
                     *field_validity = SET_BIT(*field_validity, conv);
                 }
                 break;
@@ -470,7 +470,7 @@ int16_t NMEAParser::my_sscanf(int16_t *field_validity, const char *src, const ch
                 if (!*buf) {
                     *f = 0;
                 } else {
-                    *f = static_cast<float>(my_atof(buf));
+                    *f = static_cast<float>(myatof(buf));
                     *field_validity = SET_BIT(*field_validity, conv);
                 }
                 break;
@@ -479,7 +479,7 @@ int16_t NMEAParser::my_sscanf(int16_t *field_validity, const char *src, const ch
 			//compute a string
             case 's':
                 a = va_arg(ap, char *);
-                my_strncpy(a, buf, my_strlen(buf)+1);
+                mystrncpy(a, buf, mystrlen(buf)+1);
                 if (buf[0]) *field_validity = SET_BIT(*field_validity, conv);
                 break;
 
@@ -498,9 +498,9 @@ int16_t NMEAParser::my_sscanf(int16_t *field_validity, const char *src, const ch
                     *i = 0;
                 } else {
                     if (!*(buf+1))
-                        *i = my_atoh(*buf);
+                        *i = myatoh(*buf);
                     else if (!*(buf+2))
-                        *i = (my_atoh(*buf)*16) + my_atoh(*(buf+1));
+                        *i = (myatoh(*buf)*16) + myatoh(*(buf+1));
                     else *i = -1;
                     *field_validity = SET_BIT(*field_validity, conv);
                 }

@@ -233,8 +233,8 @@ struct GPRMC {
 };
 
 /**
- * @brief GLL - Geographic Latitude and Longitude is a holdover from Loran data and some old units may not send the time and data active information if they are emulating Loran data.
- * If a gps is emulating Loran data they may use the LC Loran prefix instead of GP.
+ * @brief GLL - Geographic Latitude and Longitude is a holdover from Loran data and some old units may not send the time and data active information if they are
+ * emulating Loran data. If a gps is emulating Loran data they may use the LC Loran prefix instead of GP.
  * Example: $GPGLL,4916.45,N,12311.12,W,225444,A,*1D
  */
 struct GPGLL {
@@ -403,23 +403,23 @@ private:
 	/**
 	 * @brief Converts a single char to its corresponding digit. Can handle '0' to 'F', lowercase or not.
 	 */
-	int16_t my_atoh(char a);
+	int16_t myatoh(char a);
 	/**
 	 * @brief Very fast version of strncpy, just for fun.
 	 */
-	char *my_strncpy(char *dst, const char *src, int16_t n);
+	char *mystrncpy(char *dst, const char *src, int16_t n);
 	/**
 	 * @brief Very fast version of strlen, just for fun.
 	 */
-	int16_t my_strlen(const char* str);
+	int16_t mystrlen(const char* str);
 	/**
 	 * @brief Converts a string to an integer.
 	 */
-	int32_t my_atoi(const char *str);
+	int32_t myatoi(const char *str);
 	/**
 	 * @brief Converts a string to an float.
 	 */
-	float my_atof(const char *s);
+	float myatof(const char *s);
 	/**
 	 * @brief NMEAParser's own implementation of sscanf. It's a shrunk-to-the-minimum, whitespace compatible version
 	 * of common sscanf.
@@ -430,7 +430,7 @@ private:
 	 * @param ... The variables to write to.
 	 * @return int16_t The number of fields successfully parsed.
 	 */
-	int16_t my_sscanf(int16_t *field_validity, const char *src, const char *format, ... );
+	int16_t mysscanf(int16_t *field_validity, const char *src, const char *format, ... );
 
 	//calculus tools
 };
