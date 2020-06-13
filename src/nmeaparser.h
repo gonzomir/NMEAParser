@@ -8,34 +8,29 @@
 #endif
 #include <stdarg.h>
 
-/*
-	Checksum = 8bit exclusive OR of all characters, excluding '$' and '*'
-*/
-
 /**
- * PLSR Compass measurement report 1: calibration and acceleration.
+ * @brief PLSR Compass measurement report 1: calibration and acceleration.
  * Rate: default 1Hz, maximum 5Hz
+ * Example: $PLSR,245,1,95,7,165,148,-37,210,31,0,2*1D
  */
 struct PLSR2451 {
 	bool isValid;					/**< This tells if struct's content is issued from a valid sentence. If not, do not use struct's datas.*/
 	int16_t fieldValidity;			/**< Each bit of this int16_t telle if the corresponding field is valid of not. */
 
 	int16_t direction;				/**< Direction (degree. Magnetic direction, 0-360, 0=north)*/
-	int16_t calibration_status;		/**< */
-	int16_t field_intensity;		/**< */
+	int16_t calibration_status;		/**< Auto-calibration status: 7:complete */
+	int16_t field_intensity;		/**< Magnetic field intensity: 0..1300 (0µT to 520µT)*/
 	int16_t acceleration_x;			/**< Acceleration X (-512 to 511 -> -2G to 2G)*/
 	int16_t acceleration_y;			/**< Acceleration Y (-512 to 511 -> -2G to 2G)*/
 	int16_t acceleration_z;			/**< Acceleration Z (-512 to 511 -> -2G to 2G)*/
 	int16_t temperature;			/**< Temperature (Celsius)*/
-	int16_t mounting_mode;			/**< */
+	int16_t mounting_mode;			/**< Module Mounting Mode:0..7, default 0 */
 	int16_t current_calibration;	/**< Current Calibration (non zero: valid, 0=not valid)*/
 };
 
 /*
 	$PLSR,245,2
-	PLSR Compass measurement report 2: attitude. The PLSR compass measurement report 2 contains
-	a set of the attitude vectors, each row of the matrix means attitude vectors and it is
-	normalized with 0x1000.
+
 	Rate: 1hz, maximum 5Hz
 	Sentence ID		 $PLSR,245,2,
 	Xx				  -3520 (X acceleration on X axis)
@@ -49,43 +44,45 @@ struct PLSR2451 {
 	Zz				  4075
 	Checksum			*11
 */
+/**
+ * @brief PLSR Compass measurement report 2: attitude. The PLSR compass measurement report 2 contains
+ * a set of the attitude vectors, each row of the matrix means attitude vectors and it is
+ * normalized with 0x1000.
+ * Example: $PLSR,245,2,2375,3323,-317,-34,414,4075,3338,-2360,269*2B
+ */
 struct PLSR2452 {
 	bool isValid;					/**< This tells if struct's content is issued from a valid sentence. If not, do not use struct's datas.*/
 	int16_t fieldValidity;			/**< Each bit of this int16_t telle if the corresponding field is valid of not. */
 
-	int16_t xx;						/**< */
-	int16_t yx;						/**< */
-	int16_t zx;						/**< */
-	int16_t xy;						/**< */
-	int16_t yy;						/**< */
-	int16_t zy;						/**< */
-	int16_t xz;						/**< */
-	int16_t yz;						/**< */
-	int16_t zz;						/**< */
+	int16_t xx;						/**< X acceleration data on X axis*/
+	int16_t yx;						/**< Y acceleration data on X axis*/
+	int16_t zx;						/**< Z acceleration data on X axis */
+	int16_t xy;						/**< X acceleration data on Y axis */
+	int16_t yy;						/**< Y acceleration data on Y axis */
+	int16_t zy;						/**< Z acceleration data on Y axis */
+	int16_t xz;						/**< X acceleration data on Z axis */
+	int16_t yz;						/**< Y acceleration data on Z axis */
+	int16_t zz;						/**< Z acceleration data on Z axis */
 };
 
-/*
-	$PLSR,245,7
-	3D GPS Speed output (ECEF coordinate)
-	Sentence ID		 $PLSR,245,7,
-	GPS Speed (east)	11
-	GPS Speed (north)   -6
-	GPS Speed (up)	  9
-	Checksum			 *17
-*/
+/**
+ * @brief PLSR2457 - proprietary message for magnetic sensor.
+ * Example: $PLSR,245,7,0,0,0*05
+ */
 struct PLSR2457 {
 	bool isValid;					/**< This tells if struct's content is issued from a valid sentence. If not, do not use struct's datas.*/
 	int16_t fieldValidity;			/**< Each bit of this int16_t telle if the corresponding field is valid of not. */
 
-	int16_t gps_speed_east;			/**< */
-	int16_t gps_speed_north;		/**< */
-	int16_t gps_speed_up;			/**< */
+	int16_t gps_speed_east;			/**< GPS speed toward east, in cm/sec*/
+	int16_t gps_speed_north;		/**< GPS speed toward north, in cm/sec*/
+	int16_t gps_speed_up;			/**< GPS speed upward, in cm/sec*/
 };
 
 /**
  * @brief GGA - essential fix data which provide 3D location and accuracy data.
  * Example: $GPGGA,123519,4807.038,N,01131.000,E,1,08,0.9,545.4,M,46.9,M,,*47
- * If the height of geoid is missing then the altitude should be suspect. Some non-standard implementations report altitude with respect to the ellipsoid rather than geoid altitude. Some units do not report negative altitudes at all. This is the only sentence that reports altitude.
+ * If the height of geoid is missing then the altitude should be suspect. Some non-standard implementations report altitude with respect to the ellipsoid rather than
+ * geoid altitude. Some units do not report negative altitudes at all. This is the only sentence that reports altitude.
  */
 struct GPGGA {
 	bool isValid;					/**< This tells if struct's content is issued from a valid sentence. If not, do not use struct's datas.*/
@@ -122,8 +119,14 @@ struct GPGGA {
 /**
  * @brief GSA - GPS DOP and active satellites.
  * Example: $GPGSA,A,3,04,05,,09,12,,,24,,,,,2.5,1.3,2.1*39
- * This sentence provides details on the nature of the fix. It includes the numbers of the satellites being used in the current solution and the DOP. DOP (dilution of precision) is an indication of the effect of satellite geometry on the accuracy of the fix. It is a unitless number where smaller is better. For 3D fixes using 4 satellites a 1.0 would be considered to be a perfect number, however for overdetermined solutions it is possible to see numbers below 1.0.
- * There are differences in the way the PRN's are presented which can effect the ability of some programs to display this data. For example, in the example shown below there are 5 satellites in the solution and the null fields are scattered indicating that the almanac would show satellites in the null positions that are not being used as part of this solution. Other receivers might output all of the satellites used at the beginning of the sentence with the null field all stacked up at the end. This difference accounts for some satellite display programs not always being able to display the satellites being tracked. Some units may show all satellites that have ephemeris data without regard to their use as part of the solution but this is non-standard.
+ * This sentence provides details on the nature of the fix. It includes the numbers of the satellites being used in the current solution and the DOP. DOP (dilution of precision)
+ * is an indication of the effect of satellite geometry on the accuracy of the fix. It is a unitless number where smaller is better. For 3D fixes using 4 satellites a 1.0 would
+ * be considered to be a perfect number, however for overdetermined solutions it is possible to see numbers below 1.0.
+ * There are differences in the way the PRN's are presented which can effect the ability of some programs to display this data. For example, in the example shown below there are
+ * 5 satellites in the solution and the null fields are scattered indicating that the almanac would show satellites in the null positions that are not being used as part of this
+ * solution. Other receivers might output all of the satellites used at the beginning of the sentence with the null field all stacked up at the end. This difference accounts for
+ * some satellite display programs not always being able to display the satellites being tracked. Some units may show all satellites that have ephemeris data without regard to
+ * their use as part of the solution but this is non-standard.
  */
 struct GPGSA {
 	bool isValid;					/**< This tells if struct's content is issued from a valid sentence. If not, do not use struct's datas.*/
@@ -157,8 +160,14 @@ struct GPGSA {
 /**
  * @brief GSV - Satellites in View shows data about the satellites that the unit might be able to find based on its viewing mask and almanac data.
  * Example: $GPGSV,2,1,08,01,40,083,46,02,17,308,41,12,07,344,39,14,22,228,45*75
- * It also shows current ability to track this data. Note that one GSV sentence only can provide data for up to 4 satellites and thus there may need to be 3 sentences for the full information. It is reasonable for the GSV sentence to contain more satellites than GGA might indicate since GSV may include satellites that are not used as part of the solution. It is not a requirment that the GSV sentences all appear in sequence. To avoid overloading the data bandwidth some receivers may place the various sentences in totally different samples since each sentence identifies which one it is.
- * The field called SNR (Signal to Noise Ratio) in the NMEA standard is often referred to as signal strength. SNR is an indirect but more useful value that raw signal strength. It can range from 0 to 99 and has units of dB according to the NMEA standard, but the various manufacturers send different ranges of numbers with different starting numbers so the values themselves cannot necessarily be used to evaluate different units. The range of working values in a given gps will usually show a difference of about 25 to 35 between the lowest and highest values, however 0 is a special case and may be shown on satellites that are in view but not being tracked.
+ * It also shows current ability to track this data. Note that one GSV sentence only can provide data for up to 4 satellites and thus there may need to be 3 sentences for the full
+ * information. It is reasonable for the GSV sentence to contain more satellites than GGA might indicate since GSV may include satellites that are not used as part of the solution.
+ * It is not a requirment that the GSV sentences all appear in sequence. To avoid overloading the data bandwidth some receivers may place the various sentences in totally different
+ * samples since each sentence identifies which one it is.
+ * The field called SNR (Signal to Noise Ratio) in the NMEA standard is often referred to as signal strength. SNR is an indirect but more useful value that raw signal strength. It
+ * can range from 0 to 99 and has units of dB according to the NMEA standard, but the various manufacturers send different ranges of numbers with different starting numbers so the
+ * values themselves cannot necessarily be used to evaluate different units. The range of working values in a given gps will usually show a difference of about 25 to 35 between the
+ * lowest and highest values, however 0 is a special case and may be shown on satellites that are in view but not being tracked.
  */
 struct GPGSV {
 	bool isValid;					/**< This tells if struct's content is issued from a valid sentence. If not, do not use struct's datas.*/
@@ -186,7 +195,8 @@ struct GPGSV {
 };
 
 /**
- * @brief HCHDG - Compass output is used on Garmin etrex summit, vista , and 76S receivers to output the value of the internal flux-gate compass. Only the magnetic heading and magnetic variation is shown in the message.
+ * @brief HCHDG - Compass output is used on Garmin etrex summit, vista , and 76S receivers to output the value of the internal flux-gate compass. Only the magnetic heading and
+ * magnetic variation is shown in the message.
  * Example: $HCHDG,101.1,,,7.1,W*3C
  */
 struct HCHDG {
@@ -223,7 +233,8 @@ struct GPRMC {
 };
 
 /**
- * @brief GLL - Geographic Latitude and Longitude is a holdover from Loran data and some old units may not send the time and data active information if they are emulating Loran data. If a gps is emulating Loran data they may use the LC Loran prefix instead of GP.
+ * @brief GLL - Geographic Latitude and Longitude is a holdover from Loran data and some old units may not send the time and data active information if they are emulating Loran data.
+ * If a gps is emulating Loran data they may use the LC Loran prefix instead of GP.
  * Example: $GPGLL,4916.45,N,12311.12,W,225444,A,*1D
  */
 struct GPGLL {

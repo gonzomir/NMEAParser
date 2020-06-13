@@ -32,29 +32,40 @@ bool NMEAParser::dispatch(const char *str) {
 
     //check NMEA string type
     if (str[0] == '$') {
-        //PLSR245X
+        //PLSR24r5X
         if (str[1] == 'P' && str[2] == 'L' && str[3] == 'S' && str[4] == 'R' && str[5] == ',' && str[6] == '2' && str[7] == '4' && str[8] == '5' && str[9] == ',') {
-            if (str[10] == '1') return parsePLSR2451(str);
-            if (str[10] == '2') return parsePLSR2452(str);
-            if (str[10] == '7') return parsePLSR2457(str);
+            if (str[10] == '1')
+				return parsePLSR2451(str);
+            if (str[10] == '2')
+				return parsePLSR2452(str);
+            if (str[10] == '7')
+				return parsePLSR2457(str);
         } else if (str[1] == 'G' && str[2] == 'P') {
             //GPGGA
-            if      (str[3] == 'G' && str[4] == 'G' && str[5] == 'A') return parseGPGGA(str);
+            if      (str[3] == 'G' && str[4] == 'G' && str[5] == 'A')
+				return parseGPGGA(str);
             //GPGSA
-            else if (str[3] == 'G' && str[4] == 'S' && str[5] == 'A') return parseGPGSA(str);
+            else if (str[3] == 'G' && str[4] == 'S' && str[5] == 'A')
+				return parseGPGSA(str);
             //GPGSV
-            else if (str[3] == 'G' && str[4] == 'S' && str[5] == 'V') return parseGPGSV(str);
+            else if (str[3] == 'G' && str[4] == 'S' && str[5] == 'V')
+				return parseGPGSV(str);
             //GPRMC
-            else if (str[3] == 'R' && str[4] == 'M' && str[5] == 'C') return parseGPRMC(str);
+            else if (str[3] == 'R' && str[4] == 'M' && str[5] == 'C')
+				return parseGPRMC(str);
             //GPVTG
-            else if (str[3] == 'V' && str[4] == 'T' && str[5] == 'G') return parseGPVTG(str);
+            else if (str[3] == 'V' && str[4] == 'T' && str[5] == 'G')
+				return parseGPVTG(str);
             //GPTXT
-            else if (str[3] == 'T' && str[4] == 'X' && str[5] == 'T') return parseGPTXT(str);
+            else if (str[3] == 'T' && str[4] == 'X' && str[5] == 'T')
+				return parseGPTXT(str);
             //GPGLL
-            else if (str[3] == 'G' && str[4] == 'L' && str[5] == 'L') return parseGPGLL(str);
+            else if (str[3] == 'G' && str[4] == 'L' && str[5] == 'L')
+				return parseGPGLL(str);
         }
         //HCHDG
-        else if (str[1] == 'H' && str[2] == 'C' && str[3] == 'H' && str[4] == 'D' && str[5] == 'G') return parseHCHDG(str);
+        else if (str[1] == 'H' && str[2] == 'C' && str[3] == 'H' && str[4] == 'D' && str[5] == 'G')
+			return parseHCHDG(str);
     }
     return false;
 }
