@@ -283,6 +283,7 @@ struct GPTXT {
 	char message[70];				/**< Message, up to 61 characters*/
 };
 
+
 #define GET_BIT(x, pos) (((x)&(1<<(pos)))!=0)	/**< Retrieves a bit from a value*/
 #define SET_BIT(x, pos) ((x)|(1<<(pos)))		/**< Sets a bit in a value*/
 #define IS_DIGIT(c) ((c)>='0' && (c)<='9')		/**< Tests if a character is a digit or not.*/

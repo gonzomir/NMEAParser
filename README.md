@@ -79,8 +79,6 @@ It's quite simple to add your own NMEA sentence:
 - [NMEA 0183 Amendment (adds $GPTXT)](https://www.nmea.org/Assets/20160520%20txt%20amendment.pdf)
 
 # Todo
-- [ ] Add examples
-- [ ] Complete unit tests
 - [ ] Add way to compose sentences
 - [ ] Add calculation tools (distances..)
 
