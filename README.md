@@ -22,6 +22,17 @@
     <img src='https://sonar.x99.fr/api/project_badges/measure?project=NMEAParser&metric=vulnerabilities'/>
 </div>
 
+# Donate
+If you find this code useful and appreciate my work, feel free to click the button below to donate and help me continue. Every cent is appreciated! Thank you!
+
+<div align="center">
+
+[![](donate.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=6EX6SCMSYPF94&currency_code=EUR&source=url)
+
+</div>
+
+# About
+
 NMEAParser is a library that aims at drastically simplifiying the parsing of [NMEA](https://www.wikiwand.com/en/NMEA_0183) sentences. These can be from a GPS, a gyrocompass or any device that complies with the NMEA 0183 standard.
 
 # But...why?
