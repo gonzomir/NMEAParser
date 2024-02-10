@@ -141,7 +141,7 @@ bool NMEAParser::parseGPGGA(const char *str) {
             &lastGPGGA.station_id,
             &checksum);
 
-    lastGPGGA.isValid = ((scanned == 15) && verifyChecksum(str));
+    lastGPGGA.isValid = ((scanned == 16) && verifyChecksum(str));
     lastParsed = NMEAParser::TYPE_GPGGA;
     return lastGPGGA.isValid;
 }
@@ -169,7 +169,7 @@ bool NMEAParser::parseGPGSA(const char *str) {
             &lastGPGSA.vdop,
             &checksum);
 
-    lastGPGSA.isValid = ((scanned == 18) && verifyChecksum(str));
+    lastGPGSA.isValid = ((scanned == 19) && verifyChecksum(str));
     lastParsed = NMEAParser::TYPE_GPGSA;
     return lastGPGSA.isValid;
 }
@@ -199,7 +199,7 @@ bool NMEAParser::parseGPGSV(const char *str) {
             &lastGPGSV.sat4_snr,
             &checksum);
 
-    lastGPGSV.isValid = ((scanned == 20) && verifyChecksum(str));
+    lastGPGSV.isValid = ((scanned == 21) && verifyChecksum(str));
     lastParsed = NMEAParser::TYPE_GPGSV;
     return lastGPGSV.isValid;
 }
@@ -237,7 +237,7 @@ bool NMEAParser::parseGPRMC(const char *str) {
             &lastGPRMC.mode,
             &checksum);
 
-    lastGPRMC.isValid = ((scanned == 13) && verifyChecksum(str));
+    lastGPRMC.isValid = ((scanned == 14) && verifyChecksum(str));
     lastParsed = NMEAParser::TYPE_GPRMC;
     return lastGPRMC.isValid;
 }
@@ -254,7 +254,7 @@ bool NMEAParser::parseGPGLL(const char *str) {
             &lastGPGLL.data_active,
             &checksum);
 
-    lastGPGLL.isValid = ((scanned == 7) && verifyChecksum(str));
+    lastGPGLL.isValid = ((scanned == 8) && verifyChecksum(str));
     lastParsed = NMEAParser::TYPE_GPGLL;
     return lastGPGLL.isValid;
 }
@@ -274,7 +274,7 @@ bool NMEAParser::parseGPVTG(const char *str) {
             &lastGPVTG.mode,
             &checksum);
 
-    lastGPVTG.isValid = ((scanned == 10) && verifyChecksum(str));
+    lastGPVTG.isValid = ((scanned == 11) && verifyChecksum(str));
     lastParsed = NMEAParser::TYPE_GPVTG;
     return lastGPVTG.isValid;
 }
@@ -289,7 +289,7 @@ bool NMEAParser::parseGPTXT(const char *str) {
             lastGPTXT.message,
             &checksum);
 
-    lastGPTXT.isValid = ((scanned == 5) && verifyChecksum(str));
+    lastGPTXT.isValid = ((scanned == 6) && verifyChecksum(str));
     lastParsed = NMEAParser::TYPE_GPTXT;
     return lastGPTXT.isValid;
 }
