@@ -88,7 +88,7 @@ struct GPGGA {
 	bool isValid;					/**< This tells if struct's content is issued from a valid sentence. If not, do not use struct's datas.*/
 	int16_t fieldValidity;			/**< Each bit of this int16_t telle if the corresponding field is valid of not. */
 
-	char gnss[1];             /** The GNSS single letter identifier. P for GPS, L for GALILEO, N for GLONASS, and B for Beidou. */
+	char gnss[1];             /** The GNSS single letter identifier. P for GPS, A for GALILEO, L for GLONASS, B for Beidou, etc. */
 
 	char utc_time[15];				/**< UTC time, HH:MM:SS*/
 	char latitude[15];				/**< Latitude, DDMM.SSS*/
@@ -134,7 +134,7 @@ struct GPGSA {
 	bool isValid;					/**< This tells if struct's content is issued from a valid sentence. If not, do not use struct's datas.*/
 	int16_t fieldValidity;			/**< Each bit of this int16_t telle if the corresponding field is valid of not. */
 
-	char gnss[1];             /** The GNSS single letter identifier. P for GPS, L for GALILEO, N for GLONASS, and B for Beidou. */
+	char gnss[1];             /** The GNSS single letter identifier. P for GPS, A for GALILEO, L for GLONASS, B for Beidou, etc. */
 
 	char mode1;						/**< A=automatic, allowed to switch 2D/3D, M=manual, forced to operate in 2D/3D*/
 	/**
@@ -177,7 +177,7 @@ struct GPGSV {
 	bool isValid;					/**< This tells if struct's content is issued from a valid sentence. If not, do not use struct's datas.*/
 	int16_t fieldValidity;			/**< Each bit of this int16_t telle if the corresponding field is valid of not. */
 
-	char gnss[1];             /** The GNSS single letter identifier. P for GPS, L for GALILEO, N for GLONASS, and B for Beidou. */
+	char gnss[1];             /** The GNSS single letter identifier. P for GPS, A for GALILEO, L for GLONASS, B for Beidou, etc. */
 
 	int16_t number_of_messages;		/**< Number of sentences for full data*/
 	int16_t message_idx;			/**< Sentence number*/
@@ -224,7 +224,7 @@ struct GPRMC {
 	bool isValid;					/**< This tells if struct's content is issued from a valid sentence. If not, do not use struct's datas.*/
 	int16_t fieldValidity;			/**< Each bit of this int16_t telle if the corresponding field is valid of not. */
 
-	char gnss[1];             /** The GNSS single letter identifier. P for GPS, L for GALILEO, N for GLONASS, and B for Beidou. */
+	char gnss[1];             /** The GNSS single letter identifier. P for GPS, A for GALILEO, L for GLONASS, B for Beidou, etc. */
 
 	char utc_time[15];				/**< UTC time, HH:MM:SS*/
 	char status;					/**< Status A=active or V=Void.*/
@@ -249,7 +249,7 @@ struct GPGLL {
 	bool isValid;					/**< This tells if struct's content is issued from a valid sentence. If not, do not use struct's datas.*/
 	int16_t fieldValidity;			/**< Each bit of this int16_t telle if the corresponding field is valid of not. */
 
-	char gnss[1];             /** The GNSS single letter identifier. P for GPS, L for GALILEO, N for GLONASS, and B for Beidou. */
+	char gnss[1];             /** The GNSS single letter identifier. P for GPS, A for GALILEO, L for GLONASS, B for Beidou, etc. */
 
 	char latitude[15];				/**< Latitude, DDMM.SSS*/
 	char north_south_indicator;		/**< N (North) or S (South)*/
@@ -267,7 +267,7 @@ struct GPVTG {
 	bool isValid;					/**< This tells if struct's content is issued from a valid sentence. If not, do not use struct's datas.*/
 	int16_t fieldValidity;			/**< Each bit of this int16_t telle if the corresponding field is valid of not. */
 
-	char gnss[1];             /** The GNSS single letter identifier. P for GPS, L for GALILEO, N for GLONASS, and B for Beidou. */
+	char gnss[1];             /** The GNSS single letter identifier. P for GPS, A for GALILEO, L for GLONASS, B for Beidou, etc. */
 
 	float measured_heading_1;		/**< True track made good (degrees)*/
 	char north_type_1;				/**< True (T) or Magnetic (M)*/
@@ -289,7 +289,7 @@ struct GPTXT {
 	bool isValid;					/**< This tells if struct's content is issued from a valid sentence. If not, do not use struct's datas.*/
 	int16_t fieldValidity;			/**< Each bit of this int16_t telle if the corresponding field is valid of not. */
 
-	char gnss[1];             /** The GNSS single letter identifier. P for GPS, L for GALILEO, N for GLONASS, and B for Beidou. */
+	char gnss[1];             /** The GNSS single letter identifier. P for GPS, A for GALILEO, L for GLONASS, B for Beidou, etc. */
 
 	uint8_t number_of_messages;		/**< Total amount of messages, from 1 to 99*/
 	uint8_t sentence_number;		/**< MEssage number*/
