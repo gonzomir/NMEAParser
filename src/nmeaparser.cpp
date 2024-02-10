@@ -40,7 +40,7 @@ bool NMEAParser::dispatch(const char *str) {
 				return parsePLSR2452(str);
             if (str[10] == '7')
 				return parsePLSR2457(str);
-        } else if (str[1] == 'G' && str[2] == 'P') {
+        } else if (str[1] == 'G' && (str[2] == 'P' || str[2] == 'N' || str[2] == 'L' || str[2] == 'B')) {
             //GPGGA
             if      (str[3] == 'G' && str[4] == 'G' && str[5] == 'A')
 				return parseGPGGA(str);
@@ -123,7 +123,8 @@ bool NMEAParser::parsePLSR2457(const char *str) {
 
 bool NMEAParser::parseGPGGA(const char *str) {
     checksum = 0;
-    scanned = mysscanf(&lastGPGGA.fieldValidity, str, "$GPGGA,%s,%s,%c,%s,%c,%d,%d,%f,%f,%s,%f,%s,%f,%d*%X",
+    scanned = mysscanf(&lastGPGGA.fieldValidity, str, "$G%cGGA,%s,%s,%c,%s,%c,%d,%d,%f,%f,%s,%f,%s,%f,%d*%X",
+            lastGPGGA.gnss,
             lastGPGGA.utc_time,
             lastGPGGA.latitude,
             &lastGPGGA.north_south_indicator,
@@ -147,7 +148,8 @@ bool NMEAParser::parseGPGGA(const char *str) {
 
 bool NMEAParser::parseGPGSA(const char *str) {
     checksum = 0;
-    scanned = mysscanf(&lastGPGSA.fieldValidity, str, "$GPGSA,%c,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%f,%f,%f*%X",
+    scanned = mysscanf(&lastGPGSA.fieldValidity, str, "$G%cGSA,%c,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%f,%f,%f*%X",
+            &lastGPGSA.gnss,
             &lastGPGSA.mode1,
             &lastGPGSA.mode2,
             &lastGPGSA.sat_channel_1,
@@ -174,7 +176,8 @@ bool NMEAParser::parseGPGSA(const char *str) {
 
 bool NMEAParser::parseGPGSV(const char *str) {
     checksum = 0;
-    scanned = mysscanf(&lastGPGSV.fieldValidity, str, "$GPGSV,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d*%X",
+    scanned = mysscanf(&lastGPGSV.fieldValidity, str, "$G%cGSV,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d*%X",
+            &lastGPGSV.gnss,
             &lastGPGSV.number_of_messages,
             &lastGPGSV.message_idx,
             &lastGPGSV.sats_in_view,
@@ -218,7 +221,8 @@ bool NMEAParser::parseHCHDG(const char *str) {
 
 bool NMEAParser::parseGPRMC(const char *str) {
     checksum = 0;
-    scanned = mysscanf(&lastGPRMC.fieldValidity, str, "$GPRMC,%s,%c,%s,%c,%s,%c,%f,%f,%s,%f,%c,%c*%X",
+    scanned = mysscanf(&lastGPRMC.fieldValidity, str, "$G%cRMC,%s,%c,%s,%c,%s,%c,%f,%f,%s,%f,%c,%c*%X",
+            &lastGPRMC.gnss,
             &lastGPRMC.utc_time,
             &lastGPRMC.status,
             lastGPRMC.latitude,
@@ -240,7 +244,8 @@ bool NMEAParser::parseGPRMC(const char *str) {
 
 bool NMEAParser::parseGPGLL(const char *str) {
     checksum = 0;
-    scanned = mysscanf(&lastGPGLL.fieldValidity, str, "$GPGLL,%s,%c,%s,%c,%s,%c*%X",
+    scanned = mysscanf(&lastGPGLL.fieldValidity, str, "$G%cGLL,%s,%c,%s,%c,%s,%c*%X",
+            lastGPGLL.gnss,
             lastGPGLL.latitude,
             &lastGPGLL.north_south_indicator,
             lastGPGLL.longitude,
@@ -256,7 +261,8 @@ bool NMEAParser::parseGPGLL(const char *str) {
 
 bool NMEAParser::parseGPVTG(const char *str) {
     checksum = 0;
-    scanned = mysscanf(&lastGPVTG.fieldValidity, str, "$GPVTG,%f,%c,%f,%c,%f,%c,%f,%c,%c*%X",
+    scanned = mysscanf(&lastGPVTG.fieldValidity, str, "$G%cVTG,%f,%c,%f,%c,%f,%c,%f,%c,%c*%X",
+            &lastGPVTG.gnss,
             &lastGPVTG.measured_heading_1,
             &lastGPVTG.north_type_1,
             &lastGPVTG.measured_heading_2,
@@ -275,7 +281,8 @@ bool NMEAParser::parseGPVTG(const char *str) {
 
 bool NMEAParser::parseGPTXT(const char *str) {
     checksum = 0;
-    scanned = mysscanf(&lastGPTXT.fieldValidity, str, "$GPTXT,%d,%d,%d,%s*%X",
+    scanned = mysscanf(&lastGPTXT.fieldValidity, str, "$G%cTXT,%d,%d,%d,%s*%X",
+            &lastGPTXT.gnss,
             &lastGPTXT.number_of_messages,
             &lastGPTXT.sentence_number,
             &lastGPTXT.text_identifier,
