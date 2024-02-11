@@ -40,7 +40,7 @@ bool NMEAParser::dispatch(const char *str) {
 				return parsePLSR2452(str);
             if (str[10] == '7')
 				return parsePLSR2457(str);
-        } else if (str[1] == 'G' && (str[2] == 'P' || str[2] == 'A' || str[2] == 'L' || str[2] == 'B' || str[2] == 'I' || str[2] == 'Q')) {
+        } else if (str[1] == 'G' && (str[2] == 'P' || str[2] == 'A' || str[2] == 'L' || str[2] == 'B' || str[2] == 'I' || str[2] == 'Q' || str[2] == 'N')) {
             //GPGGA
             if      (str[3] == 'G' && str[4] == 'G' && str[5] == 'A')
 				return parseGPGGA(str);
