@@ -123,8 +123,8 @@ bool NMEAParser::parsePLSR2457(const char *str) {
 
 bool NMEAParser::parseGPGGA(const char *str) {
     checksum = 0;
-    scanned = mysscanf(&lastGPGGA.fieldValidity, str, "$G%cGGA,%s,%s,%c,%s,%c,%d,%d,%f,%f,%s,%f,%s,%f,%d*%X",
-            &lastGPGGA.gnss,
+    scanned = mysscanf(&lastGPGGA.fieldValidity, str, "$%G,%s,%s,%c,%s,%c,%d,%d,%f,%f,%s,%f,%s,%f,%d*%X",
+            &lastGPGGA.talker_id,
             lastGPGGA.utc_time,
             lastGPGGA.latitude,
             &lastGPGGA.north_south_indicator,
@@ -148,8 +148,8 @@ bool NMEAParser::parseGPGGA(const char *str) {
 
 bool NMEAParser::parseGPGSA(const char *str) {
     checksum = 0;
-    scanned = mysscanf(&lastGPGSA.fieldValidity, str, "$G%cGSA,%c,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%f,%f,%f*%X",
-            &lastGPGSA.gnss,
+    scanned = mysscanf(&lastGPGSA.fieldValidity, str, "$%G,%c,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%f,%f,%f*%X",
+            &lastGPGSA.talker_id,
             &lastGPGSA.mode1,
             &lastGPGSA.mode2,
             &lastGPGSA.sat_channel_1,
@@ -176,8 +176,8 @@ bool NMEAParser::parseGPGSA(const char *str) {
 
 bool NMEAParser::parseGPGSV(const char *str) {
     checksum = 0;
-    scanned = mysscanf(&lastGPGSV.fieldValidity, str, "$G%cGSV,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d*%X",
-            &lastGPGSV.gnss,
+    scanned = mysscanf(&lastGPGSV.fieldValidity, str, "$%G,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d*%X",
+            &lastGPGSV.talker_id,
             &lastGPGSV.number_of_messages,
             &lastGPGSV.message_idx,
             &lastGPGSV.sats_in_view,
@@ -221,8 +221,8 @@ bool NMEAParser::parseHCHDG(const char *str) {
 
 bool NMEAParser::parseGPRMC(const char *str) {
     checksum = 0;
-    scanned = mysscanf(&lastGPRMC.fieldValidity, str, "$G%cRMC,%s,%c,%s,%c,%s,%c,%f,%f,%s,%f,%c,%c*%X",
-            &lastGPRMC.gnss,
+    scanned = mysscanf(&lastGPRMC.fieldValidity, str, "$%G,%s,%c,%s,%c,%s,%c,%f,%f,%s,%f,%c,%c*%X",
+            &lastGPRMC.talker_id,
             &lastGPRMC.utc_time,
             &lastGPRMC.status,
             lastGPRMC.latitude,
@@ -244,8 +244,8 @@ bool NMEAParser::parseGPRMC(const char *str) {
 
 bool NMEAParser::parseGPGLL(const char *str) {
     checksum = 0;
-    scanned = mysscanf(&lastGPGLL.fieldValidity, str, "$G%cGLL,%s,%c,%s,%c,%s,%c*%X",
-            &lastGPGLL.gnss,
+    scanned = mysscanf(&lastGPGLL.fieldValidity, str, "$%G,%s,%c,%s,%c,%s,%c*%X",
+            &lastGPGLL.talker_id,
             lastGPGLL.latitude,
             &lastGPGLL.north_south_indicator,
             lastGPGLL.longitude,
@@ -261,8 +261,8 @@ bool NMEAParser::parseGPGLL(const char *str) {
 
 bool NMEAParser::parseGPVTG(const char *str) {
     checksum = 0;
-    scanned = mysscanf(&lastGPVTG.fieldValidity, str, "$G%cVTG,%f,%c,%f,%c,%f,%c,%f,%c,%c*%X",
-            &lastGPVTG.gnss,
+    scanned = mysscanf(&lastGPVTG.fieldValidity, str, "$%G,%f,%c,%f,%c,%f,%c,%f,%c,%c*%X",
+            &lastGPVTG.talker_id,
             &lastGPVTG.measured_heading_1,
             &lastGPVTG.north_type_1,
             &lastGPVTG.measured_heading_2,
@@ -281,8 +281,8 @@ bool NMEAParser::parseGPVTG(const char *str) {
 
 bool NMEAParser::parseGPTXT(const char *str) {
     checksum = 0;
-    scanned = mysscanf(&lastGPTXT.fieldValidity, str, "$G%cTXT,%d,%d,%d,%s*%X",
-            &lastGPTXT.gnss,
+    scanned = mysscanf(&lastGPTXT.fieldValidity, str, "$%G,%d,%d,%d,%s*%X",
+            &lastGPTXT.talker_id,
             &lastGPTXT.number_of_messages,
             &lastGPTXT.sentence_number,
             &lastGPTXT.text_identifier,
@@ -512,6 +512,14 @@ int16_t NMEAParser::mysscanf(int16_t *field_validity, const char *src, const cha
                     *field_validity = SET_BIT(*field_validity, conv);
                 }
                 break;
+
+			//compute a GNSS talker ID from first two chars of sentence ID
+            case 'G':
+                a = va_arg(ap, char *);
+                mystrncpy(a, buf, 2) + '\0';
+                if (buf[0]) *field_validity = SET_BIT(*field_validity, conv);
+                break;
+
             }
             conv++;
         }
