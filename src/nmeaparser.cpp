@@ -124,7 +124,7 @@ bool NMEAParser::parsePLSR2457(const char *str) {
 bool NMEAParser::parseGPGGA(const char *str) {
     checksum = 0;
     scanned = mysscanf(&lastGPGGA.fieldValidity, str, "$G%cGGA,%s,%s,%c,%s,%c,%d,%d,%f,%f,%s,%f,%s,%f,%d*%X",
-            lastGPGGA.gnss,
+            &lastGPGGA.gnss,
             lastGPGGA.utc_time,
             lastGPGGA.latitude,
             &lastGPGGA.north_south_indicator,
@@ -245,7 +245,7 @@ bool NMEAParser::parseGPRMC(const char *str) {
 bool NMEAParser::parseGPGLL(const char *str) {
     checksum = 0;
     scanned = mysscanf(&lastGPGLL.fieldValidity, str, "$G%cGLL,%s,%c,%s,%c,%s,%c*%X",
-            lastGPGLL.gnss,
+            &lastGPGLL.gnss,
             lastGPGLL.latitude,
             &lastGPGLL.north_south_indicator,
             lastGPGLL.longitude,
